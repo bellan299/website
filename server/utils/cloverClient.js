@@ -1,13 +1,15 @@
 const axios = require('axios');
 
-// [STUBBED FOR PUBLIC DEPLOYMENT]
-// All Clover API logic is disabled. Restore this logic when enabling API functionality.
 class CloverClient {
   constructor() {
-    // Stubbed: Do not check for env vars or assign real keys
-    this.apiKey = null;
-    this.merchantId = null;
-    this.locationId = null;
+    this.apiKey = process.env.CLOVER_API_KEY;
+    this.merchantId = process.env.CLOVER_MERCHANT_ID;
+    this.locationId = process.env.CLOVER_LOCATION_ID;
+    this.baseURL = 'https://api.clover.com';
+    
+    if (!this.apiKey || !this.merchantId) {
+      throw new Error('CLOVER_API_KEY and CLOVER_MERCHANT_ID are required');
+    }
   }
 
   /**
@@ -16,8 +18,35 @@ class CloverClient {
    * @returns {Promise<Array>} Array of items
    */
   async getItems(options = {}) {
-    // Return empty array or mock data
-    return [];
+    try {
+      const params = new URLSearchParams({
+        limit: options.limit || 1000,
+        offset: options.offset || 0
+      });
+
+      if (this.locationId) {
+        params.append('locationId', this.locationId);
+      }
+
+      if (options.expand) {
+        params.append('expand', options.expand);
+      }
+
+      const response = await axios.get(
+        `${this.baseURL}/v3/merchants/${this.merchantId}/items?${params}`,
+        {
+          headers: {
+            'Authorization': `Bearer ${this.apiKey}`,
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+
+      return this.formatItems(response.data.elements || []);
+    } catch (error) {
+      console.error('Error fetching items from Clover:', error.message);
+      throw error;
+    }
   }
 
   /**
@@ -27,8 +56,41 @@ class CloverClient {
    * @returns {Promise<Array>} Array of items
    */
   async getItemsByCategory(category, options = {}) {
-    // Return empty array or mock data
-    return [];
+    try {
+      const params = new URLSearchParams({
+        limit: options.limit || 1000,
+        offset: options.offset || 0,
+        expand: 'categories'
+      });
+
+      if (this.locationId) {
+        params.append('locationId', this.locationId);
+      }
+
+      const response = await axios.get(
+        `${this.baseURL}/v3/merchants/${this.merchantId}/items?${params}`,
+        {
+          headers: {
+            'Authorization': `Bearer ${this.apiKey}`,
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+
+      const allItems = response.data.elements || [];
+      const filteredItems = allItems.filter(item => {
+        const categories = item.categories?.elements || [];
+        return categories.some(cat => 
+          cat.id === category || 
+          cat.name?.toLowerCase().includes(category.toLowerCase())
+        );
+      });
+
+      return this.formatItems(filteredItems);
+    } catch (error) {
+      console.error('Error fetching items by category from Clover:', error.message);
+      throw error;
+    }
   }
 
   /**
@@ -38,8 +100,39 @@ class CloverClient {
    * @returns {Promise<Array>} Array of items
    */
   async searchItems(query, options = {}) {
-    // Return empty array or mock data
-    return [];
+    try {
+      const params = new URLSearchParams({
+        limit: options.limit || 1000,
+        offset: options.offset || 0,
+        expand: 'categories'
+      });
+
+      if (this.locationId) {
+        params.append('locationId', this.locationId);
+      }
+
+      const response = await axios.get(
+        `${this.baseURL}/v3/merchants/${this.merchantId}/items?${params}`,
+        {
+          headers: {
+            'Authorization': `Bearer ${this.apiKey}`,
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+
+      const allItems = response.data.elements || [];
+      const searchQuery = query.toLowerCase();
+      const filteredItems = allItems.filter(item => 
+        item.name?.toLowerCase().includes(searchQuery) ||
+        item.description?.toLowerCase().includes(searchQuery)
+      );
+
+      return this.formatItems(filteredItems);
+    } catch (error) {
+      console.error('Error searching items from Clover:', error.message);
+      throw error;
+    }
   }
 
   /**
@@ -48,8 +141,26 @@ class CloverClient {
    * @returns {Promise<Object>} Item object
    */
   async getItemById(id) {
-    // Return null or mock data
-    return null;
+    try {
+      const params = new URLSearchParams({
+        expand: 'categories,tags,modifications'
+      });
+
+      const response = await axios.get(
+        `${this.baseURL}/v3/merchants/${this.merchantId}/items/${id}?${params}`,
+        {
+          headers: {
+            'Authorization': `Bearer ${this.apiKey}`,
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+
+      return this.formatItem(response.data);
+    } catch (error) {
+      console.error('Error fetching item by ID from Clover:', error.message);
+      throw error;
+    }
   }
 
   /**
@@ -57,8 +168,22 @@ class CloverClient {
    * @returns {Promise<Array>} Array of categories
    */
   async getCategories() {
-    // Return empty array or mock data
-    return [];
+    try {
+      const response = await axios.get(
+        `${this.baseURL}/v3/merchants/${this.merchantId}/categories`,
+        {
+          headers: {
+            'Authorization': `Bearer ${this.apiKey}`,
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+
+      return response.data.elements || [];
+    } catch (error) {
+      console.error('Error fetching categories from Clover:', error.message);
+      throw error;
+    }
   }
 
   /**

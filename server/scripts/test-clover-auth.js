@@ -1,15 +1,12 @@
 require('dotenv').config();
 const axios = require('axios');
 
-// [STUBBED FOR PUBLIC DEPLOYMENT]
-// All Clover API logic is disabled. Restore this logic when enabling API functionality.
 const config = {
-  apiKey: null,
-  merchantId: null,
-  locationId: null
+  apiKey: process.env.CLOVER_API_KEY,
+  merchantId: process.env.CLOVER_MERCHANT_ID,
+  locationId: process.env.CLOVER_LOCATION_ID,
+  baseURL: 'https://api.clover.com'
 };
-
-console.warn('Clover API test is disabled for public deployment. Restore logic to enable.');
 
 if (!config.apiKey) throw new Error('CLOVER_API_KEY is missing.');
 if (!config.merchantId) throw new Error('CLOVER_MERCHANT_ID is missing.');

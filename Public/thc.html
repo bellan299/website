@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THC - Jp's Liquor</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="auth-styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth-compat.js"></script>
+    <script src="auth-ui.js"></script>
+    <script src="auth.js"></script>
+    <script src="account.js"></script>
+    <script src="script.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="nav-auth">
+                    <button class="auth-btn signin-btn" onclick="showAuthModal('login')">Sign In</button>
+                    <button class="auth-btn signup-btn" onclick="showAuthModal('register')">Sign Up</button>
+                </div>
+                <div class="nav-logo">
+                    <h1><a href="index.html" style="text-decoration: none; color: inherit;">Jp's Liquor</a></h1>
+                </div>
+                <div class="nav-menu">
+                    <a href="index.html" class="nav-link">Home</a>
+                    <a href="index.html#products" class="nav-link">Products</a>
+                    <a href="index.html#bestsellers" class="nav-link">Best Sellers</a>
+                    <a href="index.html#newarrivals" class="nav-link">New Arrivals</a>
+                    <a href="index.html#about" class="nav-link">About</a>
+                    <a href="index.html#contact" class="nav-link">Contact</a>
+                </div>
+                <div class="nav-toggle">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Category Hero Section -->
+    <section class="hero" style="background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);">
+        <div class="hero-content">
+            <h1>THC Collection</h1>
+            <p>Browse our selection of THC-infused beverages and products</p>
+            <div class="category-breadcrumb">
+                <a href="index.html">Home</a> > <span>THC</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- THC Categories -->
+    <section class="categories">
+        <div class="container">
+            <h2>THC Categories</h2>
+            <div class="category-grid">
+                <div class="category-card">
+                    <i class="fas fa-cannabis" style="color: #00b894;"></i>
+                    <h3>THC Beverages</h3>
+                    <p>Infused Seltzers & Drinks</p>
+                </div>
+                <div class="category-card">
+                    <i class="fas fa-cannabis" style="color: #00cec9;"></i>
+                    <h3>Edibles</h3>
+                    <p>Gummies, Chocolates & More</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- THC Products Section -->
+    <section class="products-section">
+        <div class="container">
+            <h2>THC Products</h2>
+            <div class="filters">
+                <select id="thc-type-filter">
+                    <option value="">All THC Types</option>
+                    <option value="beverages">THC Beverages</option>
+                    <option value="edibles">Edibles</option>
+                </select>
+                <select id="sort-filter">
+                    <option value="name">Sort by Name</option>
+                    <option value="price-low">Price: Low to High</option>
+                    <option value="price-high">Price: High to Low</option>
+                    <option value="popularity">Most Popular</option>
+                </select>
+            </div>
+            <div class="products-grid" id="thc-products-grid">
+                <!-- THC products will be loaded here via JavaScript -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="https://via.placeholder.com/300x400/00b894/ffffff?text=THC+Placeholder" alt="THC Product">
+                        <div class="product-badge new">New</div>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">Sample THC Product</h3>
+                        <p class="product-price">$19.99</p>
+                        <button class="add-to-cart">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Back to Categories -->
+    <section class="categories">
+        <div class="container">
+            <h2>Shop Other Categories</h2>
+            <div class="category-grid">
+                <a href="wine.html" class="category-card">
+                    <i class="fas fa-wine-bottle"></i>
+                    <h3>Wine</h3>
+                    <p>Red, White, Rosé & Sparkling</p>
+                </a>
+                <a href="spirits.html" class="category-card">
+                    <i class="fas fa-cocktail"></i>
+                    <h3>Spirits</h3>
+                    <p>Whiskey, Vodka, Rum & More</p>
+                </a>
+                <a href="beer.html" class="category-card">
+                    <i class="fas fa-beer"></i>
+                    <h3>Beer</h3>
+                    <p>Craft & Imported Beers</p>
+                </a>
+                <a href="seltzer.html" class="category-card">
+                    <i class="fas fa-glass-whiskey"></i>
+                    <h3>Seltzer</h3>
+                    <p>Hard Seltzers</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Jp's Liquor. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html> 

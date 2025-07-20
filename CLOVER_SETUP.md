@@ -1,189 +1,132 @@
-# Clover API Setup Guide for Jp's Liquor Website
+# Clover API Setup Guide
+
+This guide will help you set up Clover API integration to fetch inventory data for your website.
 
 ## Prerequisites
-- Node.js installed on your computer
-- Your Clover Merchant ID and API Key
-- Access to your Clover Developer Dashboard
 
-## Step 1: Install Dependencies
+1. A Clover merchant account
+2. Access to the Clover Developer Dashboard
+3. Your merchant ID and location ID
 
-Open your terminal/command prompt in the project directory and run:
+## Step 1: Get Your Clover API Key
 
-```bash
-npm install
-```
+1. Go to the [Clover Developer Dashboard](https://sandbox.dev.clover.com/)
+2. Sign in with your Clover merchant account
+3. Navigate to **Apps** → **My Apps**
+4. Create a new app or use an existing one
+5. Go to the **API Keys** section
+6. Generate a new API key with the following permissions:
+   - `merchant.read`
+   - `items.read`
+   - `categories.read`
 
-This will install all the required packages (Express, Axios, CORS, etc.).
+## Step 2: Find Your Merchant and Location IDs
 
-## Step 2: Configure Clover API Credentials
+### Merchant ID
+1. In the Clover Developer Dashboard, go to **Merchants**
+2. Your merchant ID will be displayed in the URL or merchant details
 
-1. **Create a `.env` file** in your project root directory
-2. **Add your Clover credentials** to the `.env` file:
+### Location ID
+1. In the Clover Developer Dashboard, go to **Merchants** → **Your Merchant** → **Locations**
+2. Note down the location ID for the location you want to fetch inventory from
 
-```env
-CLOVER_MERCHANT_ID=your_merchant_id_here
-CLOVER_API_KEY=your_api_key_here
-PORT=3001
-```
+## Step 3: Configure Environment Variables
 
-### How to Get Your Clover Credentials:
+1. Navigate to your server directory:
+   ```bash
+   cd server
+   ```
 
-1. **Log into your Clover Developer Dashboard** at https://www.clover.com/developers
-2. **Find your Merchant ID**:
-   - Go to "Apps" → "My Apps"
-   - Look for your merchant ID in the URL or app settings
-3. **Get your API Key**:
-   - Go to "Apps" → "My Apps" → "Create App"
-   - Or use an existing app's API key
-   - Make sure the app has the necessary permissions (read access to items, categories, etc.)
+2. Create the environment file:
+   ```bash
+   node create-env.js
+   ```
 
-## Step 3: Start the Server
-
-Run the following command to start the server:
-
-```bash
-npm start
-```
-
-Or for development with auto-restart:
-
-```bash
-npm run dev
-```
+3. Edit the `.env` file and replace the placeholder values:
+   ```env
+   CLOVER_API_KEY=your_actual_api_key_here
+   CLOVER_MERCHANT_ID=your_merchant_id_here
+   CLOVER_LOCATION_ID=your_location_id_here
+   PORT=5000
+   ```
 
 ## Step 4: Test the Connection
 
-1. **Open your browser** and go to `http://localhost:3001`
-2. **Check the server console** for connection status
-3. **Test the API** by visiting `http://localhost:3001/api/health`
+1. Run the Clover API test:
+   ```bash
+   npm run test:clover
+   ```
 
-## Step 5: Configure Product Categories in Clover
+2. If successful, you should see:
+   - ✅ Merchant Information
+   - ✅ Merchant Locations
+   - ✅ Categories
+   - ✅ Items (limited to 5)
+   - ✅ Location-specific Items
 
-For best results, organize your products in Clover with these categories:
+## Step 5: Import Inventory Data
 
-### Recommended Category Names:
-- **Wine** (for wine products)
-- **Spirits** (for whiskey, vodka, rum, etc.)
-- **Beer** (for beer products)
-- **Seltzer** (for hard seltzers)
-- **THC** (for THC products)
+1. Run the inventory import script:
+   ```bash
+   npm run import:inventory
+   ```
 
-### Adding Tags for Special Features:
-- Add tag "Best Seller" to popular products
-- Add tag "New" or "New Arrival" to new products
+2. This will fetch all items from Clover and save them to `server/data/inventory.json`
 
-## Step 6: Customize Category Mapping
+## Step 6: Start the Server
 
-If your Clover categories don't match exactly, you can edit the mapping in `server.js`:
+1. Start your server:
+   ```bash
+   npm start
+   ```
 
-```javascript
-const categoryMapping = {
-    'wine': ['wine', 'red wine', 'white wine', 'rosé', 'sparkling'],
-    'spirits': ['spirits', 'whiskey', 'vodka', 'rum', 'gin', 'tequila', 'bourbon', 'scotch'],
-    'beer': ['beer', 'ale', 'lager', 'craft beer'],
-    'seltzer': ['seltzer', 'hard seltzer', 'spritzer'],
-    'thc': ['thc', 'cannabis', 'marijuana']
-};
-```
+2. Your API endpoints will now return real data from Clover:
+   - `GET /api/items` - All items
+   - `GET /api/items/categories` - All categories
+   - `GET /api/items/category/:category` - Items by category
+   - `GET /api/items/search?q=query` - Search items
+   - `GET /api/items/:id` - Single item by ID
 
 ## Troubleshooting
 
-### Common Issues:
+### Common Issues
 
-1. **"CLOVER_MERCHANT_ID not configured"**
-   - Check your `.env` file exists and has the correct values
-   - Make sure there are no spaces around the `=` sign
+1. **401 Unauthorized**: Check your API key and permissions
+2. **404 Not Found**: Verify your merchant ID and location ID
+3. **No items returned**: Ensure your Clover inventory has items
+4. **CORS errors**: Check your server configuration
 
-2. **"Failed to fetch products from Clover"**
-   - Verify your API key is correct and has proper permissions
-   - Check that your merchant ID is correct
-   - Ensure your Clover account has products
+### API Key Permissions
 
-3. **"CORS error"**
-   - The server includes CORS headers, but if you're accessing from a different domain, you may need to configure it
+Make sure your API key has these permissions:
+- `merchant.read` - Read merchant information
+- `items.read` - Read inventory items
+- `categories.read` - Read item categories
 
-4. **Products not showing up**
-   - Make sure products are marked as "available" in Clover
-   - Check that products have proper categories assigned
-   - Verify the category mapping matches your Clover categories
+### Rate Limits
 
-### API Endpoints Available:
-
-- `GET /api/products` - Get all products
-- `GET /api/products/bestsellers` - Get best sellers
-- `GET /api/products/newarrivals` - Get new arrivals
-- `GET /api/products/category/:category` - Get products by category
-- `GET /api/health` - Health check
+Clover API has rate limits. If you encounter rate limit errors:
+- Implement caching for frequently accessed data
+- Use pagination for large datasets
+- Consider using the import script to cache data locally
 
 ## Production Deployment
 
-When ready to deploy to production:
+For production deployment (e.g., Vercel):
 
-1. **Set up environment variables** on your hosting platform
-2. **Update the API base URL** in `config.js` if needed
-3. **Configure your domain** and SSL certificates
-4. **Set up proper security headers**
+1. Add your environment variables to your hosting platform
+2. Set `CLOVER_API_KEY`, `CLOVER_MERCHANT_ID`, and `CLOVER_LOCATION_ID`
+3. Deploy your application
+
+## Security Notes
+
+- Never commit your `.env` file to version control
+- Use environment variables for all API keys
+- Regularly rotate your API keys
+- Monitor API usage for security
 
 ## Support
 
-If you encounter issues:
-1. Check the server console for error messages
-2. Verify your Clover API credentials
-3. Test the API endpoints directly
-4. Check the browser console for frontend errors
-
-## Next Steps
-
-Once connected:
-- Add product images to Clover for better display
-- Set up inventory tracking
-- Configure real-time stock updates
-- Add order management features 
-
----
-
-## **How to Fix a Clover 401 Unauthorized Error**
-
-### 1. **Double-check your API key**
-- Make sure you copied the API key exactly, with no extra spaces or characters.
-- If you regenerated the key, use the latest one.
-
-### 2. **Check API Key Permissions**
-- The API key must have permission to access the Clover Items API.
-- In your Clover Developer Dashboard, make sure your app has at least **read access** to:
-  - Items
-  - Categories
-  - Inventory (if you want stock info)
-- If you’re not sure, try creating a new API key/app and give it all permissions.
-
-### 3. **Check if the API key is for the correct environment**
-- If you have multiple Clover accounts (sandbox vs. production), make sure the key is for the correct merchant/account.
-
-### 4. **Test the API key manually**
-- Try making a request with your API key using a tool like [Postman](https://www.postman.com/) or `curl`:
-  ```sh
-  curl -H "Authorization: Bearer YOUR_API_KEY" "https://api.clover.com/v3/merchants/{merchant_id}/items"
-  ```
-  (Replace `{merchant_id}` with your actual merchant ID if you have it.)
-
-### 5. **Check for Merchant ID requirement**
-- Some Clover endpoints require the merchant ID in the URL.
-- If you can get your merchant ID, add it to your `.env` and restart the server:
-  ```
-  CLOVER_MERCHANT_ID=your_merchant_id_here
-  CLOVER_API_KEY=your_api_key_here
-  PORT=3001
-  ```
-
----
-
-## **Summary of Next Steps**
-1. **Double-check your API key for typos.**
-2. **Check your Clover app’s permissions.**
-3. **If possible, get your Merchant ID and add it to your `.env`.**
-4. **Try the API key in Postman or curl to see if it works outside your app.**
-5. **If you still get 401, regenerate the API key in Clover and try again.**
-
----
-
-If you need help with any of these steps, let me know which one you want to try or if you want help finding your Merchant ID! 
+- [Clover API Documentation](https://docs.clover.com/)
+- [Clover Developer Dashboard](https://sandbox.dev.clover.com/)
+- [Clover Support](https://www.clover.com/support) 

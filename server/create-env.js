@@ -1,8 +1,6 @@
 const fs = require('fs');
 const path = require('path');
 
-// [STUBBED FOR PUBLIC DEPLOYMENT]
-// This is a template. Do NOT put real API keys here for production or public deployment.
 const envContent = `CLOVER_API_KEY=YOUR_CLOVER_API_KEY
 CLOVER_MERCHANT_ID=YOUR_CLOVER_MERCHANT_ID
 CLOVER_LOCATION_ID=YOUR_CLOVER_LOCATION_ID

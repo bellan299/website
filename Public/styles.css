@@ -221,15 +221,24 @@ body {
   color: var(--white);
 }
 
+/* --- Enhanced Shop by Category Section --- */
 .categories {
   background: var(--white);
   padding: 48px 0 32px 0;
 }
+.categories > .container > h2 {
+  text-align: center;
+}
 .category-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 32px;
   margin-top: 32px;
+  justify-items: center;
+  align-items: stretch;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
 }
 .category-card {
   background: var(--white);
@@ -240,53 +249,57 @@ body {
   transition: all var(--transition);
   cursor: pointer;
   border: 2px solid transparent;
+  text-decoration: none;
+  color: inherit;
+  display: block;
 }
-
 .category-card:hover {
   transform: translateY(-4px);
   box-shadow: var(--shadow-lg);
   border-color: var(--primary);
+  text-decoration: none;
+  color: inherit;
 }
-
 .category-card i {
   font-size: 3rem;
   color: var(--primary);
   margin-bottom: 16px;
   display: block;
 }
-
 .category-card h3 {
   color: var(--primary-dark);
   font-size: 1.4rem;
   font-weight: 600;
   margin-bottom: 8px;
+  margin: 0 0 8px 0;
 }
-
 .category-card p {
   color: var(--text-secondary);
   font-size: 0.95rem;
   margin: 0;
 }
-
-/* Category cards as links */
-.category-card {
-  text-decoration: none;
-  color: inherit;
-  display: block;
+@media (max-width: 900px) {
+  .category-grid {
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 600px;
+  }
+  .category-card {
+    padding: 28px 10px 22px 10px;
+    max-width: 200px;
+  }
 }
-
-.category-card:hover {
-  text-decoration: none;
-  color: inherit;
-}
-.category-card h3 {
-  margin: 0 0 8px 0;
-  font-size: 1.3rem;
-  color: var(--primary-dark);
-}
-.category-card p {
-  color: var(--muted);
-  font-size: 1rem;
+@media (max-width: 600px) {
+  .category-grid {
+    grid-template-columns: 1fr;
+    max-width: 340px;
+  }
+  .category-card {
+    padding: 18px 4px 16px 4px;
+    max-width: 140px;
+  }
+  .category-card i {
+    font-size: 2.1rem;
+  }
 }
 
 .products-section {
@@ -788,4 +801,196 @@ body {
   background-color: var(--primary);
   margin: 3px 0;
   transition: 0.3s;
+} 
+
+.wine-category-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 32px;
+  margin-top: 32px;
+}
+.wine-category-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 220px;
+  height: 100%;
+  text-align: center;
+  box-sizing: border-box;
+}
+.wine-category-icon {
+  font-size: 3rem;
+  color: #8b2635;
+  margin-bottom: 16px;
+  display: block;
+}
+.wine-category-card h3 {
+  margin: 0 0 8px 0;
+  font-size: 1.2rem;
+  color: var(--primary-dark);
+}
+.wine-category-card p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+@media (max-width: 900px) {
+  .wine-category-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 600px) {
+  .wine-category-grid {
+    grid-template-columns: 1fr;
+  }
+} 
+
+/* --- Responsive Enhancements for Full-Site Compatibility --- */
+
+/* Responsive container padding */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  box-sizing: border-box;
+}
+
+/* Responsive images */
+img, .product-image img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Responsive category and product grids */
+.category-grid, .products-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+}
+@media (max-width: 900px) {
+  .category-grid, .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+}
+@media (max-width: 600px) {
+  .category-grid, .products-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+/* Responsive product cards */
+.product-card, .category-card {
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Responsive modals */
+.auth-modal, .loading-modal {
+  max-width: 95vw;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Responsive navigation */
+.navbar {
+  flex-wrap: wrap;
+  height: auto;
+  min-height: 60px;
+}
+.nav-menu {
+  flex-wrap: wrap;
+  gap: 24px;
+}
+@media (max-width: 900px) {
+  .nav-menu {
+    gap: 16px;
+  }
+}
+@media (max-width: 600px) {
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
+    height: auto;
+    padding: 12px 8px;
+  }
+  .nav-menu {
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    gap: 8px;
+    margin-left: 0;
+  }
+  .nav-logo {
+    margin-left: 0;
+    margin-bottom: 8px;
+  }
+}
+
+/* Responsive typography */
+h1, .hero h1 {
+  font-size: 2.2rem;
+}
+h2 {
+  font-size: 1.5rem;
+}
+@media (max-width: 600px) {
+  h1, .hero h1 {
+    font-size: 1.4rem;
+  }
+  h2 {
+    font-size: 1.1rem;
+  }
+}
+
+/* Responsive padding for sections */
+section, .products-section, .categories {
+  padding-left: 0;
+  padding-right: 0;
+}
+@media (max-width: 600px) {
+  .container {
+    padding: 0 8px;
+  }
+  section, .products-section, .categories {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+/* Responsive footer */
+.footer-content {
+  flex-wrap: wrap;
+  gap: 24px;
+}
+@media (max-width: 900px) {
+  .footer-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+}
+
+/* Responsive forms */
+.contact-form input, .contact-form textarea {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+/* Responsive modal content */
+.auth-container {
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+}
+@media (max-width: 600px) {
+  .auth-container {
+    max-width: 98vw;
+    padding: 8px;
+  }
 } 

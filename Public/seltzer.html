@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seltzer - Jp's Liquor</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="auth-styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth-compat.js"></script>
+    <script src="auth-ui.js"></script>
+    <script src="auth.js"></script>
+    <script src="account.js"></script>
+    <script src="script.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="nav-auth">
+                    <button class="auth-btn signin-btn" onclick="showAuthModal('login')">Sign In</button>
+                    <button class="auth-btn signup-btn" onclick="showAuthModal('register')">Sign Up</button>
+                </div>
+                <div class="nav-logo">
+                    <h1><a href="index.html" style="text-decoration: none; color: inherit;">Jp's Liquor</a></h1>
+                </div>
+                <div class="nav-menu">
+                    <a href="index.html" class="nav-link">Home</a>
+                    <a href="index.html#products" class="nav-link">Products</a>
+                    <a href="index.html#bestsellers" class="nav-link">Best Sellers</a>
+                    <a href="index.html#newarrivals" class="nav-link">New Arrivals</a>
+                    <a href="index.html#about" class="nav-link">About</a>
+                    <a href="index.html#contact" class="nav-link">Contact</a>
+                </div>
+                <div class="nav-toggle">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Category Hero Section -->
+    <section class="hero" style="background: linear-gradient(135deg, #7ed6df 0%, #e056fd 100%);">
+        <div class="hero-content">
+            <h1>Seltzer Collection</h1>
+            <p>Discover our refreshing selection of hard seltzers and spritzers</p>
+            <div class="category-breadcrumb">
+                <a href="index.html">Home</a> > <span>Seltzer</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seltzer Categories -->
+    <section class="categories">
+        <div class="container">
+            <h2>Seltzer Categories</h2>
+            <div class="category-grid">
+                <div class="category-card">
+                    <i class="fas fa-glass-whiskey" style="color: #7ed6df;"></i>
+                    <h3>Hard Seltzer</h3>
+                    <p>Classic & Flavored</p>
+                </div>
+                <div class="category-card">
+                    <i class="fas fa-wine-glass-alt" style="color: #e056fd;"></i>
+                    <h3>Spritzer</h3>
+                    <p>Wine & Fruit Spritzers</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seltzer Products Section -->
+    <section class="products-section">
+        <div class="container">
+            <h2>Seltzer Products</h2>
+            <div class="filters">
+                <select id="seltzer-type-filter">
+                    <option value="">All Seltzer Types</option>
+                    <option value="hard">Hard Seltzer</option>
+                    <option value="spritzer">Spritzer</option>
+                </select>
+                <select id="sort-filter">
+                    <option value="name">Sort by Name</option>
+                    <option value="price-low">Price: Low to High</option>
+                    <option value="price-high">Price: High to Low</option>
+                    <option value="popularity">Most Popular</option>
+                </select>
+            </div>
+            <div class="products-grid" id="seltzer-products-grid">
+                <!-- Seltzer products will be loaded here via JavaScript -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="https://via.placeholder.com/300x400/7ed6df/ffffff?text=Seltzer+Placeholder" alt="Seltzer Product">
+                        <div class="product-badge new">New</div>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">Sample Seltzer Product</h3>
+                        <p class="product-price">$9.99</p>
+                        <button class="add-to-cart">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Non Alcoholic Hero Section -->
+    <section class="hero" style="background: linear-gradient(135deg, #b2bec3 0%, #636e72 100%);">
+        <div class="hero-content">
+            <h1>Non Alcoholic Collection</h1>
+            <p>Enjoy our selection of zero proof seltzers, sodas, and more</p>
+            <div class="category-breadcrumb">
+                <a href="index.html">Home</a> > <span>Non Alcoholic</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Non Alcoholic Categories -->
+    <section class="categories">
+        <div class="container">
+            <h2>Non Alcoholic Categories</h2>
+            <div class="category-grid">
+                <div class="category-card">
+                    <i class="fas fa-bottle-water" style="color: #00b894;"></i>
+                    <h3>Zero Proof Seltzer</h3>
+                    <p>Refreshing & Bubbly</p>
+                </div>
+                <div class="category-card">
+                    <i class="fas fa-glass-water" style="color: #0984e3;"></i>
+                    <h3>Soda</h3>
+                    <p>Classic & Craft Sodas</p>
+                </div>
+                <div class="category-card">
+                    <i class="fas fa-mug-hot" style="color: #fdcb6e;"></i>
+                    <h3>Other Beverages</h3>
+                    <p>Teas, Juices & More</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Non Alcoholic Products Section -->
+    <section class="products-section">
+        <div class="container">
+            <h2>Non Alcoholic Products</h2>
+            <div class="filters">
+                <select id="nonalcoholic-type-filter">
+                    <option value="">All Types</option>
+                    <option value="seltzer">Zero Proof Seltzer</option>
+                    <option value="soda">Soda</option>
+                    <option value="other">Other Beverages</option>
+                </select>
+                <select id="sort-filter-nonalcoholic">
+                    <option value="name">Sort by Name</option>
+                    <option value="price-low">Price: Low to High</option>
+                    <option value="price-high">Price: High to Low</option>
+                    <option value="popularity">Most Popular</option>
+                </select>
+            </div>
+            <div class="products-grid" id="nonalcoholic-products-grid">
+                <!-- Non Alcoholic products will be loaded here via JavaScript -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="https://via.placeholder.com/300x400/b2bec3/ffffff?text=Non+Alcoholic+Placeholder" alt="Non Alcoholic Product">
+                        <div class="product-badge new">New</div>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">Sample Non Alcoholic Product</h3>
+                        <p class="product-price">$3.99</p>
+                        <button class="add-to-cart">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Back to Categories -->
+    <section class="categories">
+        <div class="container">
+            <h2>Shop Other Categories</h2>
+            <div class="category-grid">
+                <a href="wine.html" class="category-card">
+                    <i class="fas fa-wine-bottle"></i>
+                    <h3>Wine</h3>
+                    <p>Red, White, Rosé & Sparkling</p>
+                </a>
+                <a href="spirits.html" class="category-card">
+                    <i class="fas fa-cocktail"></i>
+                    <h3>Spirits</h3>
+                    <p>Whiskey, Vodka, Rum & More</p>
+                </a>
+                <a href="beer.html" class="category-card">
+                    <i class="fas fa-beer"></i>
+                    <h3>Beer</h3>
+                    <p>Craft & Imported Beers</p>
+                </a>
+                <a href="thc.html" class="category-card">
+                    <i class="fas fa-cannabis"></i>
+                    <h3>THC</h3>
+                    <p>THC Infused</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Jp's Liquor. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html> 
