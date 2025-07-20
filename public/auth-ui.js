@@ -798,6 +798,27 @@ class AuthUI {
     }
 }
 
+// Safeguard: Prevent modal auto-open on page load unless explicitly allowed
+function safeShowModal(modalType, triggeredByUser = false) {
+    // Only allow auto-open if explicitly allowed (never set by default)
+    if (!triggeredByUser && !window._allowAutoModalOpen) {
+        console.warn('Blocked auto modal open:', modalType);
+        return;
+    }
+    if (window.authUI && typeof window.authUI.showModal === 'function') {
+        window.authUI.showModal(modalType);
+    } else {
+        // fallback
+        const modal = document.getElementById(modalType + '-modal');
+        if (modal) {
+            document.querySelectorAll('.auth-modal.active').forEach(m => m.classList.remove('active'));
+            modal.classList.add('active');
+        }
+    }
+}
+// Patch all global showAuthModal calls to use safeguard
+window.showAuthModal = function(modalType) { safeShowModal(modalType, true); };
+
 // Close user dropdown when clicking outside
 document.addEventListener('click', (e) => {
     const userMenu = document.querySelector('.user-menu');
