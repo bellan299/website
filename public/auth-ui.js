@@ -3,7 +3,7 @@
 // Global functions are now defined in the HTML head section
 
 // Wait for Firebase to be initialized before setting up auth
-let auth = null;
+var auth = null;
 let recaptchaVerifier = null;
 
 // Initialize auth and reCAPTCHA when Firebase is ready
