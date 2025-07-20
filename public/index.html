@@ -29,7 +29,7 @@
                     fallbackShowModal(modalType);
                 }
             } else {
-                console.error('window.authUI is not available or showModal method missing!');
+                console.warn('window.authUI is not available or showModal method missing! Falling back.');
                 // Fallback to direct modal manipulation
                 fallbackShowModal(modalType);
             }
@@ -44,9 +44,13 @@
                     m.classList.remove('active');
                 });
                 modal.classList.add('active');
-                console.log('Modal shown via fallback:', modalType);
+                console.log('Modal shown via fallback:', modalType, modal);
             } else {
                 console.error('Modal not found for fallback:', modalType);
+                // List all modal IDs present
+                document.querySelectorAll('.auth-modal').forEach(m => {
+                    console.log('Available modal ID:', m.id);
+                });
             }
         }
 
@@ -124,6 +128,10 @@
             }
         }
     </script>
+    <style>
+      .auth-modal { display: none !important; }
+      .auth-modal.active { display: flex !important; }
+    </style>
 </head>
 <body>
     <!-- Header -->
@@ -343,14 +351,6 @@
             </div>
         </div>
     </footer>
-
-    <!-- Loading Modal -->
-    <div id="loading-modal" class="loading-modal">
-        <div class="loading-content">
-            <div class="spinner"></div>
-            <p>Loading products...</p>
-        </div>
-    </div>
 
     <!-- Authentication UI Components -->
     <div id="auth-modals-container">

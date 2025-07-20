@@ -18,9 +18,13 @@
         <nav class="navbar">
             <div class="nav-container">
                 <div class="nav-auth">
-                    <button class="auth-btn account-btn" onclick="showAccountPage()">
-                        <i class="fas fa-user"></i>
-                        My Account
+                    <button class="auth-btn signin-btn" onclick="showAuthModal('login')">
+                        <i class="fas fa-sign-in-alt"></i>
+                        Sign In
+                    </button>
+                    <button class="auth-btn signup-btn" onclick="showAuthModal('register')">
+                        <i class="fas fa-user-plus"></i>
+                        Sign Up
                     </button>
                 </div>
                 <div class="nav-logo">
