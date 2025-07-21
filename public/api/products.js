@@ -1,5 +1,3 @@
-import axios from 'axios';
-
 const CLOVER_CONFIG = {
   BASE_URL: 'https://api.clover.com',
   MERCHANT_ID: process.env.CLOVER_MERCHANT_ID || null,
@@ -8,21 +6,31 @@ const CLOVER_CONFIG = {
 
 async function makeCloverRequest(endpoint, params = {}) {
   try {
-    const url = `${CLOVER_CONFIG.BASE_URL}${endpoint}`;
+    const url = new URL(`${CLOVER_CONFIG.BASE_URL}${endpoint}`);
     const requestParams = { ...params };
     if (CLOVER_CONFIG.MERCHANT_ID) {
       requestParams.merchant_id = CLOVER_CONFIG.MERCHANT_ID;
     }
-    const response = await axios.get(url, {
+    
+    // Add query parameters to URL
+    Object.keys(requestParams).forEach(key => {
+      url.searchParams.append(key, requestParams[key]);
+    });
+    
+    const response = await fetch(url.toString(), {
       headers: {
         'Authorization': `Bearer ${CLOVER_CONFIG.API_KEY}`,
         'Content-Type': 'application/json'
-      },
-      params: requestParams
+      }
     });
-    return response.data;
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    return await response.json();
   } catch (error) {
-    console.error('Clover API Error:', error.response?.data || error.message);
+    console.error('Clover API Error:', error.message);
     throw error;
   }
 }
