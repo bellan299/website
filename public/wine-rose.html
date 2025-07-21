@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rosé Wine - Jp's Liquor</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body style="padding-top:50px; padding-bottom:50px;">
+    <header class="header">...</header>
+    <section class="hero" style="background: linear-gradient(135deg, #8b2635 0%, #a83244 100%);">
+        <div class="hero-content">
+            <h1>Rosé Wine</h1>
+            <p>Enjoy our light and elegant rosé wines.</p>
+            <div class="category-breadcrumb">
+                <a href="index.html">Home</a> > <a href="wine.html">Wine</a> > <span>Rosé Wine</span>
+            </div>
+        </div>
+    </section>
+    <section class="products-section">
+        <div class="container">
+            <h2>Rosé Wine Products</h2>
+            <div id="product-list"></div>
+        </div>
+    </section>
+    <footer class="footer">...</footer>
+    <script src="config.js" defer></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      fetch('/api/products')
+        .then(res => res.json())
+        .then(data => {
+          if (data.success && data.products.length > 0) {
+            const roses = data.products.filter(product =>
+              product.category === 'wine' &&
+              (/ros[ée]/i.test(product.name) || /ros[ée]/i.test(product.description))
+            );
+            const container = document.getElementById('product-list');
+            if (!container) return;
+            if (roses.length === 0) {
+              container.innerHTML = '<p>No rosé wine products found.</p>';
+              return;
+            }
+            container.innerHTML = roses.map(product => `
+              <div class="product-card">
+                <h3>${product.name}</h3>
+                ${product.image ? `<img src="${product.image}" alt="${product.name}" style="max-width:150px;" />` : ''}
+                <p>${product.description || ''}</p>
+                <p>Price: $${product.price.toFixed(2)}</p>
+                <p>In stock: ${product.stockQuantity}</p>
+              </div>
+            `).join('');
+          } else {
+            document.getElementById('product-list').innerHTML = '<p>No products found.</p>';
+          }
+        })
+        .catch(err => {
+          const container = document.getElementById('product-list');
+          if (container) container.innerHTML = '<p>Error loading products.</p>';
+          console.error(err);
+        });
+    });
+    </script>
+</body>
+</html> 
