@@ -7,12 +7,12 @@ document.addEventListener('DOMContentLoaded', () => {
     .then(res => res.json())
     .then(data => {
       if (data.success && data.products.length > 0) {
-        // Filter for wine products that are in stock
-        const wines = data.products.filter(product => product.category === 'wine' && product.stockQuantity > 0);
+        // Filter for wine products (no stock filter)
+        const wines = data.products.filter(product => product.category === 'wine');
         const container = document.getElementById('product-list');
         if (!container) return;
         if (wines.length === 0) {
-          container.innerHTML = '<p>No wine products in stock.</p>';
+          container.innerHTML = '<p>No wine products found.</p>';
           return;
         }
         container.innerHTML = wines.map(product => `
