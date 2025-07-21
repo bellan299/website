@@ -11,23 +11,18 @@ async function makeCloverRequest(endpoint, params = {}) {
     if (CLOVER_CONFIG.MERCHANT_ID) {
       requestParams.merchant_id = CLOVER_CONFIG.MERCHANT_ID;
     }
-    
-    // Add query parameters to URL
     Object.keys(requestParams).forEach(key => {
       url.searchParams.append(key, requestParams[key]);
     });
-    
     const response = await fetch(url.toString(), {
       headers: {
         'Authorization': `Bearer ${CLOVER_CONFIG.API_KEY}`,
         'Content-Type': 'application/json'
       }
     });
-    
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-    
     return await response.json();
   } catch (error) {
     console.error('Clover API Error:', error.message);
@@ -44,24 +39,27 @@ export default async function handler(req, res) {
     });
   }
   try {
-    let itemsResponse, categoriesResponse;
+    let itemsResponse, categoriesResponse, stocksResponse;
     try {
-      itemsResponse = await makeCloverRequest('/v3/merchants/items', {
-        expand: 'categories,tags,modifications'
+      itemsResponse = await makeCloverRequest(`/v3/merchants/${CLOVER_CONFIG.MERCHANT_ID}/items`, {
+        expand: 'categories,tags,modifications',
+        limit: 1000
       });
-      categoriesResponse = await makeCloverRequest('/v3/merchants/categories');
+      categoriesResponse = await makeCloverRequest(`/v3/merchants/${CLOVER_CONFIG.MERCHANT_ID}/categories`);
+      stocksResponse = await makeCloverRequest(`/v3/merchants/${CLOVER_CONFIG.MERCHANT_ID}/item_stocks`, { limit: 1000 });
     } catch (error) {
-      if (CLOVER_CONFIG.MERCHANT_ID) {
-        itemsResponse = await makeCloverRequest(`/v3/merchants/${CLOVER_CONFIG.MERCHANT_ID}/items`, {
-          expand: 'categories,tags,modifications'
-        });
-        categoriesResponse = await makeCloverRequest(`/v3/merchants/${CLOVER_CONFIG.MERCHANT_ID}/categories`);
-      } else {
-        throw error;
-      }
+      throw error;
     }
     const products = itemsResponse.elements || [];
     const categories = categoriesResponse.elements || [];
+    const stocks = stocksResponse.elements || [];
+    // Map itemId to stock quantity
+    const stockMap = {};
+    stocks.forEach(stock => {
+      if (stock.item && stock.quantity !== undefined) {
+        stockMap[stock.item.id] = stock.quantity;
+      }
+    });
     const categoryMap = {};
     categories.forEach(category => {
       categoryMap[category.id] = category.name;
@@ -102,7 +100,7 @@ export default async function handler(req, res) {
             tag.name.toLowerCase().includes('new') || 
             tag.name.toLowerCase().includes('arrival')
           ) || false,
-          stockQuantity: item.stockCount || 0,
+          stockQuantity: stockMap[item.id] ?? 0,
           sku: item.sku || '',
           available: item.available
         };
