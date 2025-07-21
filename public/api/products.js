@@ -30,6 +30,24 @@ async function makeCloverRequest(endpoint, params = {}) {
   }
 }
 
+async function fetchAllCloverPages(endpoint, params = {}) {
+  let allElements = [];
+  let offset = 0;
+  const limit = 1000;
+  while (true) {
+    const pageParams = { ...params, limit, offset };
+    const data = await makeCloverRequest(endpoint, pageParams);
+    if (data.elements && data.elements.length > 0) {
+      allElements = allElements.concat(data.elements);
+      if (data.elements.length < limit) break; // Last page
+      offset += limit;
+    } else {
+      break;
+    }
+  }
+  return allElements;
+}
+
 export default async function handler(req, res) {
   if (!CLOVER_CONFIG.API_KEY || !CLOVER_CONFIG.MERCHANT_ID) {
     return res.status(200).json({
@@ -39,20 +57,14 @@ export default async function handler(req, res) {
     });
   }
   try {
-    let itemsResponse, categoriesResponse, stocksResponse;
+    let products, categories, stocks;
     try {
-      itemsResponse = await makeCloverRequest(`/v3/merchants/${CLOVER_CONFIG.MERCHANT_ID}/items`, {
-        expand: 'categories,tags,modifications',
-        limit: 1000
-      });
-      categoriesResponse = await makeCloverRequest(`/v3/merchants/${CLOVER_CONFIG.MERCHANT_ID}/categories`);
-      stocksResponse = await makeCloverRequest(`/v3/merchants/${CLOVER_CONFIG.MERCHANT_ID}/item_stocks`, { limit: 1000 });
+      products = await fetchAllCloverPages(`/v3/merchants/${CLOVER_CONFIG.MERCHANT_ID}/items`, { expand: 'categories,tags,modifications' });
+      categories = await fetchAllCloverPages(`/v3/merchants/${CLOVER_CONFIG.MERCHANT_ID}/categories`);
+      stocks = await fetchAllCloverPages(`/v3/merchants/${CLOVER_CONFIG.MERCHANT_ID}/item_stocks`);
     } catch (error) {
       throw error;
     }
-    const products = itemsResponse.elements || [];
-    const categories = categoriesResponse.elements || [];
-    const stocks = stocksResponse.elements || [];
     // Map itemId to stock quantity
     const stockMap = {};
     stocks.forEach(stock => {
@@ -65,7 +77,23 @@ export default async function handler(req, res) {
       categoryMap[category.id] = category.name;
     });
     const categoryMapping = {
-      'wine': ['wine', 'red wine', 'white wine', 'rosé', 'sparkling'],
+      'wine': [
+        'wine', 'red wine', 'white wine', 'rosé', 'rose', 'sparkling',
+        'dessert wine', 'port', 'sherry', 'zinfandel', 'cabernet', 'merlot',
+        'pinot', 'chardonnay', 'malbec', 'sauvignon', 'riesling', 'moscato',
+        'syrah', 'shiraz', 'bordeaux', 'chianti', 'tempranillo', 'sangiovese',
+        'grenache', 'barolo', 'barbaresco', 'nebbiolo', 'gewürztraminer',
+        'chenin blanc', 'viognier', 'semillon', 'grüner', 'prosecco', 'cava',
+        'champagne', 'lambrusco', 'vermouth', 'ice wine', 'pet nat', 'petillant',
+        'frizzante', 'vouvray', 'beaujolais', 'gamay', 'carignan', 'mourvedre',
+        'petite sirah', 'petit verdot', 'cabernet franc', 'albariño', 'verdejo',
+        'garnacha', 'fiano', 'falanghina', 'gavi', 'soave', 'trebbiano', 'verdicchio',
+        'valpolicella', 'amarone', 'ripasso', 'primitivo', 'aglianico', 'nero d’avola',
+        'carmenere', 'torrontes', 'bonarda', 'tannat', 'pinotage', 'viura', 'macabeo',
+        'godello', 'loureiro', 'arinto', 'baga', 'touriga', 'trincadeira', 'antao vaz',
+        'moscatel', 'muscat', 'vinho verde', 'txakoli', 'txakolina', 'malvasia', 'picpoul',
+        'marsanne', 'roussanne', 'claret', 'clarete', 'rosato', 'rosado', 'sparkling wine'
+      ],
       'spirits': ['spirits', 'whiskey', 'vodka', 'rum', 'gin', 'tequila', 'bourbon', 'scotch'],
       'beer': ['beer', 'ale', 'lager', 'craft beer'],
       'seltzer': ['seltzer', 'hard seltzer', 'spritzer'],
