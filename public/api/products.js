@@ -30,6 +30,15 @@ async function makeCloverRequest(endpoint, params = {}) {
   }
 }
 
+// In-memory cache
+let cachedData = null;
+let cacheTimestamp = 0;
+const CACHE_DURATION_MS = 10 * 60 * 1000; // 10 minutes
+
+function delay(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 async function fetchAllCloverPages(endpoint, params = {}) {
   let allElements = [];
   let offset = 0;
@@ -47,6 +56,7 @@ async function fetchAllCloverPages(endpoint, params = {}) {
       allElements = allElements.concat(data.elements);
       if (data.elements.length < limit) break; // Last page
       offset += limit;
+      await delay(300); // Add delay to avoid rate limit
     } else {
       break;
     }
@@ -63,6 +73,13 @@ export default async function handler(req, res) {
       categories: ['wine', 'spirits', 'beer', 'seltzer', 'thc']
     });
   }
+
+  // Serve from cache if not expired
+  if (cachedData && (Date.now() - cacheTimestamp < CACHE_DURATION_MS)) {
+    console.log('Serving products from cache');
+    return res.status(200).json(cachedData);
+  }
+
   try {
     let products, categories, stocks;
     try {
@@ -140,11 +157,14 @@ export default async function handler(req, res) {
           available: item.available
         };
       });
-    res.status(200).json({
+    const responseData = {
       success: true,
       products: formattedProducts,
       categories: Object.keys(categoryMapping)
-    });
+    };
+    cachedData = responseData;
+    cacheTimestamp = Date.now();
+    res.status(200).json(responseData);
   } catch (error) {
     res.status(500).json({
       success: false,
