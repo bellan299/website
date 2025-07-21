@@ -1144,3 +1144,57 @@ section, .about-section, .contact-section {
     height: 28vh;
   }
 } 
+
+/* Make hero section background pure black and image fill the container edge-to-edge */
+.hero.hero-image-bg {
+  background: #000 !important;
+  min-height: 100vh;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+.hero-content {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+.hero-content img {
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  border-radius: 0;
+  box-shadow: none;
+  display: block;
+  max-width: none;
+  max-height: none;
+}
+@media (max-width: 900px) {
+  .hero-content, .hero-content img, .hero.hero-image-bg {
+    height: 60vh;
+    min-height: 60vh;
+    max-height: 60vh;
+    width: 100vw;
+    max-width: 100vw;
+  }
+}
+@media (max-width: 600px) {
+  .hero-content, .hero-content img, .hero.hero-image-bg {
+    height: 40vh;
+    min-height: 40vh;
+    max-height: 40vh;
+    width: 100vw;
+    max-width: 100vw;
+  }
+} 
