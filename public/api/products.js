@@ -36,7 +36,13 @@ async function fetchAllCloverPages(endpoint, params = {}) {
   const limit = 1000;
   while (true) {
     const pageParams = { ...params, limit, offset };
-    const data = await makeCloverRequest(endpoint, pageParams);
+    let data;
+    try {
+      data = await makeCloverRequest(endpoint, pageParams);
+    } catch (err) {
+      console.error(`Error fetching page at offset ${offset} for ${endpoint}:`, err);
+      break;
+    }
     if (data.elements && data.elements.length > 0) {
       allElements = allElements.concat(data.elements);
       if (data.elements.length < limit) break; // Last page
@@ -45,6 +51,7 @@ async function fetchAllCloverPages(endpoint, params = {}) {
       break;
     }
   }
+  console.log(`Fetched ${allElements.length} elements from ${endpoint}`);
   return allElements;
 }
 
