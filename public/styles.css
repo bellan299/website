@@ -1075,3 +1075,16 @@ section, .about-section, .contact-section {
   margin-left: auto;
   margin-right: auto;
 } 
+
+/* Center nav-menu in navbar when nav-menu-centered is present */
+.nav-menu.nav-menu-centered {
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  flex: 1;
+}
+
+/* Set hero background to match neon logo image */
+.hero.hero-image-bg {
+  background: #181c2a !important;
+} 
