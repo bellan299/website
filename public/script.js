@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (data.success && data.products.length > 0) {
         // Filter for wine products (no stock filter)
         const wines = data.products.filter(product => product.category === 'wine');
+        console.log('First 10 wine products:', wines.slice(0, 10)); // DEBUG
         const container = document.getElementById('product-list');
         if (!container) return;
         if (wines.length === 0) {
