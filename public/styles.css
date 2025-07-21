@@ -1,29 +1,19 @@
 /* Jp's Liquor - Modern Premium Styles */
 :root {
-  /* Primary Brand Colors - Rich Burgundy & Gold */
-  --primary: #8B2635; /* Rich burgundy */
-  --primary-dark: #5A1A22; /* Darker burgundy */
-  --primary-light: #B84A5C; /* Lighter burgundy */
-  --accent: #D4AF37; /* Rich gold */
-  --accent-dark: #B8941F; /* Darker gold */
-  --accent-light: #E6C866; /* Lighter gold */
-  
-  /* Neutral Colors */
-  --bg: #FAF9F6; /* Warm off-white */
-  --bg-secondary: #F5F3F0; /* Slightly darker background */
+  /* Modern Premium Colors */
+  --primary: #232946; /* Deep navy */
+  --primary-dark: #181c2a; /* Darker navy */
+  --primary-light: #3e497a; /* Lighter navy */
+  --accent: #FFD700; /* Gold */
+  --accent-dark: #B87333; /* Copper */
+  --accent-light: #ffe066; /* Light gold */
+  --bg: #F4F4F6; /* Warm off-white */
+  --bg-secondary: #e5e7eb; /* Soft gray */
   --white: #FFFFFF;
-  --text: #1A1A1A; /* Deep charcoal */
-  --text-secondary: #4A4A4A; /* Medium gray */
+  --text: #232946; /* Deep navy for text */
+  --text-secondary: #3e497a; /* Muted navy */
   --muted: #6B7280; /* Muted gray */
   --border: #E5E7EB; /* Light border */
-  
-  /* Status Colors */
-  --success: #059669; /* Emerald green */
-  --warning: #D97706; /* Amber */
-  --error: #DC2626; /* Red */
-  --info: #2563EB; /* Blue */
-  
-  /* Shadows & Effects */
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
   --shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
   --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
@@ -35,8 +25,8 @@
 
 body {
   font-family: 'Inter', Arial, sans-serif;
-  background: var(--bg);
-  color: var(--text);
+  background: var(--primary);
+  color: var(--bg);
   margin: 0;
   padding: 0;
   min-height: 100vh;
@@ -49,13 +39,12 @@ body {
 }
 
 .header {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  box-shadow: var(--shadow-lg);
+  background: rgba(35,41,70,0.30);
+  box-shadow: 0 2px 12px rgba(35,41,70,0.10);
+  border-bottom: 3px solid var(--accent);
   position: sticky;
   top: 0;
   z-index: 1000;
-  border-bottom: 2px solid var(--primary);
   padding-top: max(32px, env(safe-area-inset-top));
 }
 
@@ -75,25 +64,19 @@ body {
   justify-content: flex-start;
   width: 100%;
   gap: 24px;
+  position: relative;
 }
-
-.nav-auth {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  order: 1;
-}
-
 .nav-logo {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
   align-items: center;
   height: 100%;
-  order: 2;
-  margin-left: 16px;
 }
-
 .nav-logo h1 {
-  color: var(--primary);
+  color: var(--accent);
+  text-shadow: 0 2px 8px rgba(255,215,0,0.13);
   font-size: 2.2rem;
   font-weight: 800;
   margin: 0;
@@ -104,6 +87,16 @@ body {
   display: flex;
   align-items: center;
   height: 80px;
+  justify-content: center;
+  width: 100%;
+  text-align: center;
+}
+@media (max-width: 900px) {
+  .nav-logo h1 {
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+  }
 }
 .nav-menu {
   display: flex;
@@ -114,10 +107,11 @@ body {
 }
 
 .nav-link {
-  color: var(--text);
+  color: var(--white);
   text-decoration: none;
-  font-weight: 600;
-  font-size: 1.05rem;
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: 0.5px;
   position: relative;
   transition: all 0.3s ease;
   padding: 8px 0;
@@ -130,7 +124,7 @@ body {
   left: 0;
   width: 0;
   height: 2px;
-  background: var(--primary);
+  background: var(--accent);
   transition: width 0.3s ease;
 }
 
@@ -141,7 +135,7 @@ body {
 
 .nav-link:hover, 
 .nav-link.active {
-  color: var(--primary);
+  color: var(--accent);
   transform: translateY(-1px);
 }
 
@@ -183,25 +177,45 @@ body {
   box-shadow: 0 4px 12px rgba(123,30,58,0.3);
 }
 
+/* --- Enhanced Hero Section --- */
 .hero {
   background: linear-gradient(120deg, var(--primary) 60%, var(--primary-dark) 100%), url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
   color: var(--white);
-  padding: 80px 0 60px 0;
+  padding: 120px 0 80px 0;
   text-align: center;
   position: relative;
+  box-shadow: 0 8px 32px rgba(35,41,70,0.12);
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(35,41,70,0.55);
+  z-index: 1;
 }
 .hero-content {
   position: relative;
   z-index: 2;
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 32px 16px;
+  background: rgba(35,41,70,0.30); /* Slightly darker than before */
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
 }
 .hero h1 {
-  font-size: 3rem;
-  font-weight: 800;
-  margin-bottom: 16px;
+  font-size: 3.2rem;
+  font-weight: 900;
+  margin-bottom: 18px;
+  letter-spacing: 1.5px;
+  text-shadow: 0 4px 16px rgba(0,0,0,0.13);
+  color: var(--accent);
 }
 .hero p {
-  font-size: 1.3rem;
-  margin-bottom: 32px;
+  font-size: 1.5rem;
+  margin-bottom: 0;
+  color: #ffe066;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.10);
 }
 .cta-button {
   background: var(--accent);
@@ -408,8 +422,8 @@ body {
 }
 
 .about-section {
-  background: var(--white);
-  padding: 56px 0 32px 0;
+  background: linear-gradient(120deg, #fff 80%, #ffe066 100%);
+  padding: 48px 0 32px 0;
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   margin: 48px 0;
@@ -502,10 +516,12 @@ body {
 }
 
 .footer {
-  background: var(--primary-dark);
-  color: var(--white);
+  background: rgba(35,41,70,0.30);
+  color: var(--accent);
   padding: 48px 0 0 0;
   margin-top: 64px;
+  border-top: 3px solid var(--accent);
+  box-shadow: 0 -2px 12px rgba(35,41,70,0.10);
 }
 .footer-content {
   display: flex;
@@ -517,9 +533,21 @@ body {
 .footer-section {
   flex: 1 1 180px;
   margin-bottom: 24px;
+  text-align: center;
+}
+.footer-section .social-links {
+  display: inline-block;
+  text-align: center;
+  gap: 16px;
+  margin-top: 32px;
+  margin-bottom: 16px;
+}
+.footer-section .social-links a {
+  display: inline-block;
+  margin: 0 8px;
 }
 .footer-section h3, .footer-section h4 {
-  color: var(--accent);
+  color: var(--accent-light);
   margin-bottom: 12px;
 }
 .footer-section ul {
@@ -548,10 +576,10 @@ body {
   color: var(--white);
 }
 .footer-bottom {
-  border-top: 1px solid #3a1a2a;
+  border-top: 1.5px solid var(--accent-dark);
   text-align: center;
   padding: 18px 0;
-  color: #e0e0e0;
+  color: #ffe066;
   font-size: 0.95rem;
 }
 
@@ -993,4 +1021,57 @@ section, .products-section, .categories {
     max-width: 98vw;
     padding: 8px;
   }
+} 
+
+/* --- Section Dividers & Whitespace --- */
+section, .about-section, .contact-section {
+  margin-bottom: 64px;
+  border-radius: 18px;
+  box-shadow: 0 2px 12px rgba(123,30,58,0.04);
+  background: var(--white);
+  padding: 48px 0 32px 0;
+}
+
+/* --- Smooth Transitions --- */
+* {
+  transition: background 0.3s, color 0.3s, box-shadow 0.3s, border 0.3s, transform 0.3s;
+}
+
+/* --- Responsive Hero Section --- */
+@media (max-width: 900px) {
+  .hero h1 { font-size: 2.2rem; }
+  .hero-content { padding: 18px 4px; }
+}
+@media (max-width: 600px) {
+  .hero { padding: 60px 0 40px 0; }
+  .hero h1 { font-size: 1.3rem; }
+  .hero-content { padding: 8px 2px; }
+} 
+
+.about-section .about-content {
+  text-align: center;
+}
+.about-section h2 {
+  text-align: center;
+}
+.about-section p {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  color: #000;
+} 
+
+.contact-section .contact-info, .contact-section .contact-info p, .contact-section .contact-info h3, .contact-section .contact-info h4, .contact-section .contact-form, .contact-section .contact-form input, .contact-section .contact-form textarea, .contact-section .contact-form button {
+  color: #000 !important;
+} 
+
+.contact-section h2 {
+  color: #000 !important;
+} 
+
+.footer-section h4 {
+  text-align: center;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
 } 

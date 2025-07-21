@@ -22,6 +22,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use('/api/items', itemRoutes);
+app.use(itemRoutes); // Register /api/products route directly
 
 // Health check endpoint
 app.get('/health', (req, res) => {
