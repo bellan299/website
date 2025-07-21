@@ -1,3 +1,4 @@
+// Dummy change to force Vercel redeploy
 const CLOVER_CONFIG = {
   BASE_URL: 'https://api.clover.com',
   MERCHANT_ID: process.env.CLOVER_MERCHANT_ID || null,
