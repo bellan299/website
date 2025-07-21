@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     .then(res => res.json())
     .then(data => {
       if (data.success && data.products.length > 0) {
-        // Show all wine products, no filters except category
+        // Show all wine products
         const wines = data.products.filter(product => product.category === 'wine');
         const container = document.getElementById('product-list');
         if (!container) return;
