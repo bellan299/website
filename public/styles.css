@@ -25,7 +25,7 @@ body {
   background: var(--primary);
   color: var(--text);
   margin: 0;
-  padding: 0;
+  padding: 80px 0 0 0; /* Top padding for fixed header */
   min-height: 100vh;
   font-size: var(--fs-base);
   line-height: 1.6;
@@ -43,10 +43,21 @@ body {
   background: rgba(0, 0, 0, 0.3);
   box-shadow: 0 2px 12px rgba(5, 5, 5, 0.1);
   border-bottom: 3px solid var(--accent);
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
   z-index: 1000;
-  transition: transform var(--transition);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+
+.header-visible {
+  transform: translateY(0);
+}
+
+.header-hidden {
+  transform: translateY(-100%);
 }
 
 .navbar {
