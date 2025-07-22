@@ -463,10 +463,10 @@ body {
 @media (max-width: 767px) and (min-width: 576px) {
   .hero.hero-image-bg,
   .hero-content {
-    height: calc(55vh - 80px) !important;
-    height: calc(55dvh - 80px) !important; /* Modern dynamic viewport height */
-    min-height: calc(55vh - 80px) !important;
-    min-height: calc(55dvh - 80px) !important;
+    height: calc(75vh - 80px) !important; /* Increased for better logo visibility */
+    height: calc(75dvh - 80px) !important; /* Modern dynamic viewport height */
+    min-height: calc(75vh - 80px) !important;
+    min-height: calc(75dvh - 80px) !important;
   }
   
   .hero-content img {
@@ -504,10 +504,10 @@ body {
 @media (max-width: 575px) {
   .hero.hero-image-bg,
   .hero-content {
-    height: calc(60vh - 80px) !important;
-    height: calc(60dvh - 80px) !important; /* Modern dynamic viewport height */
-    min-height: calc(60vh - 80px) !important;
-    min-height: calc(60dvh - 80px) !important;
+    height: calc(80vh - 80px) !important; /* Increased for better logo visibility */
+    height: calc(80dvh - 80px) !important; /* Modern dynamic viewport height */
+    min-height: calc(80vh - 80px) !important;
+    min-height: calc(80dvh - 80px) !important;
   }
   
   .hero-content img {
@@ -573,10 +573,10 @@ body {
   
   .hero.hero-image-bg,
   .hero-content {
-    height: calc(50vh - 80px) !important;
-    height: calc(50dvh - 80px) !important; /* Modern dynamic viewport height */
-    min-height: calc(50vh - 80px) !important;
-    min-height: calc(50dvh - 80px) !important;
+    height: calc(70vh - 80px) !important; /* Increased for better logo visibility */
+    height: calc(70dvh - 80px) !important; /* Modern dynamic viewport height */
+    min-height: calc(70vh - 80px) !important;
+    min-height: calc(70dvh - 80px) !important;
   }
   
   .hero-content img {
@@ -624,10 +624,10 @@ body {
 @media (max-height: 500px) and (orientation: landscape) {
   .hero.hero-image-bg,
   .hero-content {
-    height: calc(70vh - 80px) !important;
-    height: calc(70dvh - 80px) !important; /* Modern dynamic viewport height */
-    min-height: calc(70vh - 80px) !important;
-    min-height: calc(70dvh - 80px) !important;
+    height: calc(90vh - 80px) !important; /* Increased for better logo visibility in landscape */
+    height: calc(90dvh - 80px) !important; /* Modern dynamic viewport height */
+    min-height: calc(90vh - 80px) !important;
+    min-height: calc(90dvh - 80px) !important;
   }
   
   .hero-content img {
