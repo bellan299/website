@@ -20,12 +20,23 @@
   box-sizing: border-box;
 }
 
+/* Modern solution: Prevent fixed header from overlapping content and anchor links */
+html {
+  scroll-padding-top: 80px; /* Account for fixed header height */
+  scroll-behavior: smooth;
+}
+
+/* Ensure anchor links don't hide behind fixed header */
+[id] {
+  scroll-margin-top: 80px; /* Same as header height */
+}
+
 body {
   font-family: 'Inter', Arial, sans-serif;
   background: var(--primary);
   color: var(--text);
   margin: 0;
-  padding: 0; /* Remove body padding since hero has margin-top now */
+  padding: 0; /* Remove body padding since scroll-padding handles spacing */
   min-height: 100vh;
   font-size: var(--fs-base);
   line-height: 1.6;
@@ -50,6 +61,7 @@ body {
   z-index: 1000;
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   will-change: transform;
+  height: 80px; /* Define explicit height for consistent spacing */
 }
 
 .header-visible {
@@ -121,8 +133,8 @@ body {
 /* Hero Section - Enhanced for all devices with proper mobile cropping */
 .hero.hero-image-bg {
   background: #000 !important;
-  min-height: calc(100vh - 80px); /* Account for fixed header */
-  height: calc(100vh - 80px);
+  min-height: 100vh; /* Full height since scroll-padding handles header spacing */
+  height: 100vh;
   width: 100vw;
   display: flex;
   align-items: center;
@@ -133,7 +145,6 @@ body {
   box-shadow: none;
   overflow: hidden;
   position: relative;
-  margin-top: 80px; /* Push hero below fixed header */
 }
 
 .hero-content {
@@ -452,10 +463,10 @@ body {
 @media (max-width: 767px) and (min-width: 576px) {
   .hero.hero-image-bg,
   .hero-content {
-    height: calc(55vh - 80px) !important;
-    height: calc(55dvh - 80px) !important; /* Modern dynamic viewport height */
-    min-height: calc(55vh - 80px) !important;
-    min-height: calc(55dvh - 80px) !important;
+    height: 55vh !important;
+    height: 55dvh !important; /* Modern dynamic viewport height */
+    min-height: 55vh !important;
+    min-height: 55dvh !important;
   }
   
   .hero-content img {
@@ -493,10 +504,10 @@ body {
 @media (max-width: 575px) {
   .hero.hero-image-bg,
   .hero-content {
-    height: calc(60vh - 80px) !important;
-    height: calc(60dvh - 80px) !important; /* Modern dynamic viewport height */
-    min-height: calc(60vh - 80px) !important;
-    min-height: calc(60dvh - 80px) !important;
+    height: 60vh !important;
+    height: 60dvh !important; /* Modern dynamic viewport height */
+    min-height: 60vh !important;
+    min-height: 60dvh !important;
   }
   
   .hero-content img {
@@ -562,10 +573,10 @@ body {
   
   .hero.hero-image-bg,
   .hero-content {
-    height: calc(50vh - 80px) !important;
-    height: calc(50dvh - 80px) !important; /* Modern dynamic viewport height */
-    min-height: calc(50vh - 80px) !important;
-    min-height: calc(50dvh - 80px) !important;
+    height: 50vh !important;
+    height: 50dvh !important; /* Modern dynamic viewport height */
+    min-height: 50vh !important;
+    min-height: 50dvh !important;
   }
   
   .hero-content img {
@@ -613,10 +624,10 @@ body {
 @media (max-height: 500px) and (orientation: landscape) {
   .hero.hero-image-bg,
   .hero-content {
-    height: calc(70vh - 80px) !important;
-    height: calc(70dvh - 80px) !important; /* Modern dynamic viewport height */
-    min-height: calc(70vh - 80px) !important;
-    min-height: calc(70dvh - 80px) !important;
+    height: 70vh !important;
+    height: 70dvh !important; /* Modern dynamic viewport height */
+    min-height: 70vh !important;
+    min-height: 70dvh !important;
   }
   
   .hero-content img {
