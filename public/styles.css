@@ -36,7 +36,7 @@ body {
   background: var(--primary);
   color: var(--text);
   margin: 0;
-  padding: 0; /* Remove body padding since scroll-padding handles spacing */
+  padding: 80px 0 0 0; /* Push ALL content below fixed header */
   min-height: 100vh;
   font-size: var(--fs-base);
   line-height: 1.6;
@@ -133,8 +133,8 @@ body {
 /* Hero Section - Enhanced for all devices with proper mobile cropping */
 .hero.hero-image-bg {
   background: #000 !important;
-  min-height: 100vh; /* Full height since scroll-padding handles header spacing */
-  height: 100vh;
+  min-height: calc(100vh - 80px); /* Account for body padding-top */
+  height: calc(100vh - 80px);
   width: 100vw;
   display: flex;
   align-items: center;
@@ -463,10 +463,10 @@ body {
 @media (max-width: 767px) and (min-width: 576px) {
   .hero.hero-image-bg,
   .hero-content {
-    height: 55vh !important;
-    height: 55dvh !important; /* Modern dynamic viewport height */
-    min-height: 55vh !important;
-    min-height: 55dvh !important;
+    height: calc(55vh - 80px) !important;
+    height: calc(55dvh - 80px) !important; /* Modern dynamic viewport height */
+    min-height: calc(55vh - 80px) !important;
+    min-height: calc(55dvh - 80px) !important;
   }
   
   .hero-content img {
@@ -504,10 +504,10 @@ body {
 @media (max-width: 575px) {
   .hero.hero-image-bg,
   .hero-content {
-    height: 60vh !important;
-    height: 60dvh !important; /* Modern dynamic viewport height */
-    min-height: 60vh !important;
-    min-height: 60dvh !important;
+    height: calc(60vh - 80px) !important;
+    height: calc(60dvh - 80px) !important; /* Modern dynamic viewport height */
+    min-height: calc(60vh - 80px) !important;
+    min-height: calc(60dvh - 80px) !important;
   }
   
   .hero-content img {
@@ -573,10 +573,10 @@ body {
   
   .hero.hero-image-bg,
   .hero-content {
-    height: 50vh !important;
-    height: 50dvh !important; /* Modern dynamic viewport height */
-    min-height: 50vh !important;
-    min-height: 50dvh !important;
+    height: calc(50vh - 80px) !important;
+    height: calc(50dvh - 80px) !important; /* Modern dynamic viewport height */
+    min-height: calc(50vh - 80px) !important;
+    min-height: calc(50dvh - 80px) !important;
   }
   
   .hero-content img {
@@ -624,10 +624,10 @@ body {
 @media (max-height: 500px) and (orientation: landscape) {
   .hero.hero-image-bg,
   .hero-content {
-    height: 70vh !important;
-    height: 70dvh !important; /* Modern dynamic viewport height */
-    min-height: 70vh !important;
-    min-height: 70dvh !important;
+    height: calc(70vh - 80px) !important;
+    height: calc(70dvh - 80px) !important; /* Modern dynamic viewport height */
+    min-height: calc(70vh - 80px) !important;
+    min-height: calc(70dvh - 80px) !important;
   }
   
   .hero-content img {
