@@ -8,12 +8,26 @@
   --radius: 18px;
   --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   
-  /* Responsive font sizes */
+  /* Enhanced responsive design system */
+  --header-height: clamp(60px, 8vh, 80px);
+  --nav-padding: clamp(8px, 2vw, 16px);
+  --nav-gap: clamp(12px, 3vw, 24px);
+  --nav-font-size: clamp(14px, 2.5vw, 18px);
+  --nav-padding-y: clamp(8px, 2vh, 12px);
+  --nav-padding-x: clamp(12px, 3vw, 20px);
+  
+  /* Responsive font sizes with better scaling */
   --fs-small: clamp(0.875rem, 2vw, 1rem);
   --fs-base: clamp(1rem, 2.5vw, 1.125rem);
   --fs-lg: clamp(1.25rem, 3vw, 1.5rem);
   --fs-xl: clamp(1.5rem, 4vw, 2rem);
   --fs-2xl: clamp(2rem, 5vw, 3rem);
+  
+  /* Breakpoint variables for consistent media queries */
+  --bp-mobile: 480px;
+  --bp-tablet: 768px;
+  --bp-desktop: 1024px;
+  --bp-wide: 1200px;
 }
 
 * {
@@ -22,13 +36,13 @@
 
 /* Modern solution: Prevent fixed header from overlapping content and anchor links */
 html {
-  scroll-padding-top: 80px; /* Account for fixed header height */
+  scroll-padding-top: var(--header-height);
   scroll-behavior: smooth;
 }
 
 /* Ensure anchor links don't hide behind fixed header */
 [id] {
-  scroll-margin-top: 80px; /* Same as header height */
+  scroll-margin-top: var(--header-height);
 }
 
 body {
@@ -36,7 +50,7 @@ body {
   background: var(--primary);
   color: var(--text);
   margin: 0;
-  padding: 80px 0 0 0; /* Push ALL content below fixed header */
+  padding: var(--header-height) 0 0 0;
   min-height: 100vh;
   font-size: var(--fs-base);
   line-height: 1.6;
@@ -49,7 +63,7 @@ body {
   box-sizing: border-box;
 }
 
-/* Enhanced Header with Mobile Menu */
+/* Enhanced Responsive Header with Mobile-First Approach */
 .header {
   background: rgba(0, 0, 0, 0.3);
   box-shadow: 0 2px 12px rgba(5, 5, 5, 0.1);
@@ -61,7 +75,9 @@ body {
   z-index: 1000;
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   will-change: transform;
-  height: 80px; /* Define explicit height for consistent spacing */
+  height: var(--header-height);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .header-visible {
@@ -75,17 +91,19 @@ body {
 .navbar {
   display: flex;
   align-items: center;
-  justify-content: center;
-  min-height: 80px;
+  justify-content: space-between;
+  min-height: var(--header-height);
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 clamp(16px, 4vw, 24px);
+  padding: 0 var(--nav-padding);
   position: relative;
+  width: 100%;
 }
 
 .nav-container {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   width: 100%;
   position: relative;
 }
@@ -94,31 +112,54 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  gap: var(--nav-gap);
+  margin: 0;
   flex: 1;
-  gap: clamp(20px, 4vw, 40px);
-  margin: 0 auto;
+  justify-content: center;
 }
 
 .nav-link {
   color: var(--white);
   text-decoration: none;
   font-weight: 700;
-  font-size: var(--fs-lg);
+  font-size: var(--nav-font-size);
   letter-spacing: 0.5px;
   position: relative;
   transition: all 0.3s ease;
-  padding: 12px 8px;
-  min-height: 44px; /* Touch-friendly minimum */
+  padding: var(--nav-padding-y) var(--nav-padding-x);
+  min-height: 44px;
   display: flex;
   align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  white-space: nowrap;
 }
 
 .nav-link:hover,
 .nav-link.active {
   color: var(--accent-light);
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
 }
 
-/* Mobile Menu Toggle (Hidden by default, shown on mobile) */
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: var(--accent-light);
+  transition: all 0.3s ease;
+  transform: translateX(-50%);
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+  width: 80%;
+}
+
+/* Mobile Menu Toggle - Hidden by default, shown on mobile */
 .mobile-menu-toggle {
   display: none;
   background: none;
@@ -128,13 +169,120 @@ body {
   cursor: pointer;
   padding: 12px;
   z-index: 1001;
+  min-height: 44px;
+  min-width: 44px;
+  border-radius: 8px;
+  transition: background 0.3s ease;
+}
+
+.mobile-menu-toggle:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Mobile Navigation Styles */
+@media (max-width: 767px) {
+  .navbar {
+    justify-content: space-between;
+    padding: 0 var(--nav-padding);
+  }
+  
+  .nav-menu {
+    position: fixed;
+    top: var(--header-height);
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    flex-direction: column;
+    gap: 0;
+    padding: 20px 0;
+    transform: translateY(-100%);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    border-bottom: 2px solid var(--accent);
+  }
+  
+  .nav-menu.active {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  .nav-link {
+    width: 100%;
+    padding: 16px 20px;
+    border-radius: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    justify-content: flex-start;
+    font-size: var(--fs-lg);
+  }
+  
+  .nav-link:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: none;
+  }
+  
+  .nav-link::after {
+    display: none;
+  }
+  
+  .mobile-menu-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .nav-container {
+    justify-content: space-between;
+  }
+}
+
+/* Tablet Navigation Styles */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .nav-menu {
+    gap: clamp(16px, 2.5vw, 24px);
+  }
+  
+  .nav-link {
+    font-size: clamp(14px, 2.2vw, 16px);
+    padding: clamp(10px, 2vh, 12px) clamp(14px, 2.5vw, 18px);
+  }
+}
+
+/* Desktop Navigation Styles */
+@media (min-width: 1024px) {
+  .nav-menu {
+    gap: clamp(24px, 3vw, 40px);
+  }
+  
+  .nav-link {
+    font-size: var(--nav-font-size);
+    padding: var(--nav-padding-y) var(--nav-padding-x);
+  }
+  
+  .nav-link:hover {
+    transform: translateY(-2px);
+  }
+}
+
+/* Wide Desktop Navigation Styles */
+@media (min-width: 1200px) {
+  .navbar {
+    padding: 0 clamp(24px, 4vw, 40px);
+  }
+  
+  .nav-menu {
+    gap: clamp(32px, 4vw, 48px);
+  }
 }
 
 /* Hero Section - Enhanced for all devices with proper mobile cropping */
 .hero.hero-image-bg {
   background: #000 !important;
-  min-height: calc(100vh - 80px); /* Account for body padding-top */
-  height: calc(100vh - 80px);
+  min-height: calc(100vh - var(--header-height));
+  height: calc(100vh - var(--header-height));
   width: 100vw;
   display: flex;
   align-items: center;
@@ -320,7 +468,7 @@ body {
   background: #f4f4f6;
   color: var(--text);
   transition: border var(--transition);
-  min-height: 44px; /* Touch-friendly minimum */
+  min-height: 44px;
 }
 
 .contact-form input:focus,
@@ -338,7 +486,7 @@ body {
   border-radius: 32px !important;
   padding: 14px 36px !important;
   font-size: var(--fs-base);
-  min-height: 48px; /* Touch-friendly minimum */
+  min-height: 48px;
   cursor: pointer;
 }
 
@@ -392,7 +540,7 @@ body {
   font-size: 1.5rem;
   transition: color var(--transition);
   padding: 8px;
-  min-height: 44px; /* Touch-friendly minimum */
+  min-height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -410,7 +558,7 @@ body {
   font-size: var(--fs-small);
 }
 
-/* ===== RESPONSIVE MEDIA QUERIES ===== */
+/* ===== ENHANCED RESPONSIVE MEDIA QUERIES ===== */
 
 /* Large Desktop (1200px+) */
 @media (min-width: 1200px) {
@@ -463,16 +611,16 @@ body {
 @media (max-width: 767px) and (min-width: 576px) {
   .hero.hero-image-bg,
   .hero-content {
-    height: calc(75vh - 80px) !important; /* Increased for better logo visibility */
-    height: calc(75dvh - 80px) !important; /* Modern dynamic viewport height */
-    min-height: calc(75vh - 80px) !important;
-    min-height: calc(75dvh - 80px) !important;
+    height: calc(75vh - var(--header-height)) !important;
+    height: calc(75dvh - var(--header-height)) !important;
+    min-height: calc(75vh - var(--header-height)) !important;
+    min-height: calc(75dvh - var(--header-height)) !important;
   }
   
   .hero-content img {
     width: 100% !important;
     height: 100% !important;
-    object-fit: contain !important; /* Show full logo without cropping */
+    object-fit: contain !important;
     object-position: center center !important;
     background: #000 !important;
     position: absolute !important;
@@ -504,16 +652,16 @@ body {
 @media (max-width: 575px) {
   .hero.hero-image-bg,
   .hero-content {
-    height: calc(80vh - 80px) !important; /* Increased for better logo visibility */
-    height: calc(80dvh - 80px) !important; /* Modern dynamic viewport height */
-    min-height: calc(80vh - 80px) !important;
-    min-height: calc(80dvh - 80px) !important;
+    height: calc(80vh - var(--header-height)) !important;
+    height: calc(80dvh - var(--header-height)) !important;
+    min-height: calc(80vh - var(--header-height)) !important;
+    min-height: calc(80dvh - var(--header-height)) !important;
   }
   
   .hero-content img {
     width: 100% !important;
     height: 100% !important;
-    object-fit: contain !important; /* Show full logo without cropping */
+    object-fit: contain !important;
     object-position: center center !important;
     background: #000 !important;
     position: absolute !important;
@@ -523,23 +671,24 @@ body {
   }
   
   .navbar {
-    flex-direction: column;
+    flex-direction: row;
     min-height: auto;
     padding: 12px 16px;
   }
   
   .nav-menu {
     flex-direction: column;
-    gap: 8px;
+    gap: 0;
     width: 100%;
-    margin-top: 8px;
+    margin-top: 0;
   }
   
   .nav-link {
-    padding: 8px 12px;
+    padding: 16px 20px;
     width: 100%;
-    text-align: center;
-    justify-content: center;
+    text-align: left;
+    justify-content: flex-start;
+    font-size: var(--fs-lg);
   }
   
   .features {
@@ -573,16 +722,16 @@ body {
   
   .hero.hero-image-bg,
   .hero-content {
-    height: calc(70vh - 80px) !important; /* Increased for better logo visibility */
-    height: calc(70dvh - 80px) !important; /* Modern dynamic viewport height */
-    min-height: calc(70vh - 80px) !important;
-    min-height: calc(70dvh - 80px) !important;
+    height: calc(70vh - var(--header-height)) !important;
+    height: calc(70dvh - var(--header-height)) !important;
+    min-height: calc(70vh - var(--header-height)) !important;
+    min-height: calc(70dvh - var(--header-height)) !important;
   }
   
   .hero-content img {
     width: 100% !important;
     height: 100% !important;
-    object-fit: contain !important; /* Show full logo without cropping */
+    object-fit: contain !important;
     object-position: center center !important;
     background: #000 !important;
     position: absolute !important;
@@ -624,10 +773,10 @@ body {
 @media (max-height: 500px) and (orientation: landscape) {
   .hero.hero-image-bg,
   .hero-content {
-    height: calc(90vh - 80px) !important; /* Increased for better logo visibility in landscape */
-    height: calc(90dvh - 80px) !important; /* Modern dynamic viewport height */
-    min-height: calc(90vh - 80px) !important;
-    min-height: calc(90dvh - 80px) !important;
+    height: calc(90vh - var(--header-height)) !important;
+    height: calc(90dvh - var(--header-height)) !important;
+    min-height: calc(90vh - var(--header-height)) !important;
+    min-height: calc(90dvh - var(--header-height)) !important;
   }
   
   .hero-content img {
