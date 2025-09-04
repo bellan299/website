@@ -317,6 +317,11 @@ body {
   position: absolute;
   top: 0;
   left: 0;
+  /* Performance optimizations */
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 /* About Section - Enhanced responsive design */
@@ -475,6 +480,21 @@ body {
 .contact-form textarea:focus {
   border: 1.5px solid var(--primary);
   outline: none;
+}
+
+.contact-form input:invalid,
+.contact-form textarea:invalid {
+  border-color: #e74c3c;
+}
+
+.contact-form input:valid,
+.contact-form textarea:valid {
+  border-color: #27ae60;
+}
+
+.submit-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .submit-button {

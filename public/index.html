@@ -47,7 +47,7 @@
     <link rel="apple-touch-icon" href="/icon-192x192.png">
     
     <title>JP's Liquor - Premium Spirits & Wine Store in Lino Lakes, MN | Craft Beer & Fine Wine</title>
-    <link rel="stylesheet" href="styles.css?v=8">
+    <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
@@ -130,7 +130,7 @@
     
     <section id="home" class="hero hero-image-bg">
         <div class="hero-content">
-            <img src="https://res.cloudinary.com/dzphhotmj/image/upload/v1755889595/Finalbeer_wntuy0.png" alt="Jp's Liquor Neon Logo">
+            <img src="https://res.cloudinary.com/dzphhotmj/image/upload/v1755889595/Finalbeer_wntuy0.png" alt="Jp's Liquor Neon Logo" loading="eager" fetchpriority="high">
         </div>
     </section>
     
@@ -212,100 +212,7 @@
         </div>
     </footer>
     
-    <script>
-        // Enhanced responsive navigation with mobile menu support
-        let lastScrollY = window.scrollY;
-        let ticking = false;
-        const header = document.querySelector('.header');
-        const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
-        const navMenu = document.getElementById('nav-menu');
-        const SCROLL_THRESHOLD = 5;
-
-        // Mobile menu toggle functionality
-        function toggleMobileMenu() {
-            const isActive = navMenu.classList.contains('active');
-            
-            if (isActive) {
-                navMenu.classList.remove('active');
-                mobileMenuToggle.innerHTML = '<i class="fas fa-bars"></i>';
-                mobileMenuToggle.setAttribute('aria-expanded', 'false');
-            } else {
-                navMenu.classList.add('active');
-                mobileMenuToggle.innerHTML = '<i class="fas fa-times"></i>';
-                mobileMenuToggle.setAttribute('aria-expanded', 'true');
-            }
-        }
-
-        // Close mobile menu when clicking on a link
-        function closeMobileMenu() {
-            navMenu.classList.remove('active');
-            mobileMenuToggle.innerHTML = '<i class="fas fa-bars"></i>';
-            mobileMenuToggle.setAttribute('aria-expanded', 'false');
-        }
-
-        // Close mobile menu when clicking outside
-        function handleClickOutside(event) {
-            if (!header.contains(event.target)) {
-                closeMobileMenu();
-            }
-        }
-
-        // Enhanced header scroll behavior
-        function updateHeader() {
-            const currentScrollY = window.scrollY;
-            
-            if (!header) return;
-            
-            // Only show header when at the very top (within threshold)
-            if (currentScrollY <= SCROLL_THRESHOLD) {
-                header.style.transform = 'translateY(0)';
-                header.classList.add('header-visible');
-                header.classList.remove('header-hidden');
-            } 
-            // Hide header when scrolling down from top
-            else if (currentScrollY > lastScrollY && currentScrollY > SCROLL_THRESHOLD) {
-                header.style.transform = 'translateY(-100%)';
-                header.classList.remove('header-visible');
-                header.classList.add('header-hidden');
-                // Close mobile menu when hiding header
-                closeMobileMenu();
-            }
-            
-            lastScrollY = currentScrollY;
-            ticking = false;
-        }
-
-        function requestTick() {
-            if (!ticking) {
-                requestAnimationFrame(updateHeader);
-                ticking = true;
-            }
-        }
-
-        // Event listeners
-        mobileMenuToggle.addEventListener('click', toggleMobileMenu);
-        
-        // Close menu when clicking on navigation links
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', closeMobileMenu);
-        });
-        
-        // Close menu when clicking outside
-        document.addEventListener('click', handleClickOutside);
-        
-        // Throttled scroll event with requestAnimationFrame for smooth performance
-        window.addEventListener('scroll', requestTick, { passive: true });
-        
-        // Handle window resize for responsive behavior
-        window.addEventListener('resize', () => {
-            if (window.innerWidth > 767) {
-                closeMobileMenu();
-            }
-        });
-
-        // Initialize header state
-        updateHeader();
-    </script>
+    <script src="script.js"></script>
     
     <!-- Vercel Analytics -->
     <script>
