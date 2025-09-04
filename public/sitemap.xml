@@ -1,21 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
+  <!-- Main Homepage -->
   <url>
     <loc>https://jpsliquor.com/</loc>
     <lastmod>2024-12-30</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://res.cloudinary.com/dzphhotmj/image/upload/v1755889595/Finalbeer_wntuy0.png</image:loc>
+      <image:title>JP's Liquor Neon Logo</image:title>
+      <image:caption>JP's Liquor Wine and Beer - Premium Spirits Store in Lino Lakes, MN</image:caption>
+    </image:image>
   </url>
+  
+  <!-- About Section -->
   <url>
     <loc>https://jpsliquor.com/#about</loc>
     <lastmod>2024-12-30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>
+  
+  <!-- Contact Section -->
   <url>
     <loc>https://jpsliquor.com/#contact</loc>
     <lastmod>2024-12-30</lastmod>
-    <changefreq>weekly</changefreq>
+    <changefreq>monthly</changefreq>
     <priority>0.9</priority>
+  </url>
+  
+  <!-- Store Location (for local SEO) -->
+  <url>
+    <loc>https://jpsliquor.com/#home</loc>
+    <lastmod>2024-12-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
   </url>
 </urlset>
