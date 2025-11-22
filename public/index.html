@@ -1,4 +1,3 @@
-<!-- Jp's Liquor Static Site -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -60,6 +59,212 @@
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- Age Gate + Section Divider + FAQ Styles -->
+    <style>
+      /* Prevent background scroll when age gate is active */
+      body.no-scroll {
+        overflow: hidden;
+      }
+
+      /* Age gate overlay covers entire screen */
+      #age-gate-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0, 0, 0, 0.92);
+        opacity: 1;
+        transition: opacity 250ms ease-out;
+      }
+
+      /* Hidden state (toggled via JS when verified) */
+      #age-gate-overlay.hidden {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      /* Center modal box */
+      .age-gate-modal {
+        max-width: 420px;
+        width: 90%;
+        background: #030712; /* near-black */
+        border-radius: 16px;
+        padding: 26px 22px 22px;
+        text-align: center;
+        box-shadow: 0 18px 45px rgba(0, 0, 0, 0.55);
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        border: 1px solid rgba(249, 115, 22, 0.35);
+        color: #f9fafb;
+        animation: ageGateFadeIn 320ms ease-out;
+      }
+
+      .age-gate-icon {
+        font-size: 2rem;
+        color: #f97316; /* warm accent */
+        margin-bottom: 8px;
+      }
+
+      .age-gate-modal h1 {
+        margin-bottom: 10px;
+        font-size: 1.7rem;
+        letter-spacing: 0.03em;
+      }
+
+      .age-gate-modal p {
+        margin-bottom: 14px;
+        font-size: 0.95rem;
+        color: #e5e7eb;
+      }
+
+      .age-gate-highlight {
+        font-weight: 600;
+        color: #fbbf24;
+      }
+
+      .age-gate-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin: 10px 0 8px;
+      }
+
+      @media (min-width: 480px) {
+        .age-gate-buttons {
+          flex-direction: row;
+          justify-content: center;
+        }
+      }
+
+      .age-gate-buttons button {
+        padding: 10px 16px;
+        font-size: 0.95rem;
+        font-weight: 600;
+        border-radius: 999px;
+        border: none;
+        cursor: pointer;
+        transition: transform 150ms ease, box-shadow 150ms ease, background-color 150ms ease, color 150ms ease;
+        min-width: 150px;
+      }
+
+      /* Confirm button */
+      #age-gate-yes {
+        background: linear-gradient(to right, #f97316, #ea580c);
+        color: #111827;
+        box-shadow: 0 8px 22px rgba(249, 115, 22, 0.35);
+      }
+
+      #age-gate-yes:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 10px 26px rgba(249, 115, 22, 0.45);
+      }
+
+      /* Deny button */
+      #age-gate-no {
+        background: transparent;
+        color: #e5e7eb;
+        border: 1px solid #4b5563;
+      }
+
+      #age-gate-no:hover {
+        background: rgba(15, 23, 42, 0.85);
+        border-color: #9ca3af;
+      }
+
+      .age-gate-note {
+        font-size: 0.75rem;
+        color: #9ca3af;
+        line-height: 1.4;
+      }
+
+      .age-gate-note a {
+        color: #fbbf24;
+        text-decoration: underline;
+        text-underline-offset: 2px;
+      }
+
+      @keyframes ageGateFadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(12px) scale(0.96);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+
+      /* Subtle section divider */
+      .section-divider {
+        height: 1px;
+        max-width: 960px;
+        margin: 40px auto;
+        background: linear-gradient(
+          90deg,
+          rgba(15, 23, 42, 0),
+          rgba(148, 163, 184, 0.9),
+          rgba(15, 23, 42, 0)
+        );
+        opacity: 0.7;
+      }
+
+      /* Simple FAQ styling to match rest of site */
+      .faq-section {
+        padding: 40px 16px 60px;
+      }
+
+      .faq-section .container {
+        max-width: 960px;
+        margin: 0 auto;
+      }
+
+      .faq-title {
+        font-size: 1.9rem;
+        margin-bottom: 12px;
+        text-align: center;
+      }
+
+      .faq-intro {
+        text-align: center;
+        max-width: 640px;
+        margin: 0 auto 28px;
+        color: #e5e7eb;
+        font-size: 0.98rem;
+      }
+
+      .faq-list {
+        display: grid;
+        gap: 18px;
+      }
+
+      .faq-item {
+        border-radius: 10px;
+        padding: 14px 16px;
+        background: rgba(15, 23, 42, 0.9);
+        border: 1px solid rgba(55, 65, 81, 0.9);
+      }
+
+      .faq-question {
+        font-weight: 600;
+        margin-bottom: 6px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .faq-question i {
+        color: #f97316;
+        font-size: 0.9rem;
+      }
+
+      .faq-answer {
+        font-size: 0.95rem;
+        color: #e5e7eb;
+        line-height: 1.5;
+      }
+    </style>
     
     <!-- Google Analytics - Replace GA_MEASUREMENT_ID with your actual tracking ID -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
@@ -130,8 +335,82 @@
       }
     }
     </script>
+
+    <!-- Structured Data for FAQ (Local SEO) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What are JP's Liquor store hours?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "JP's Liquor is open Monday and Tuesday from 2:00 PM to 9:00 PM, and Wednesday through Saturday from 10:00 AM to 9:00 PM. The store is closed on Sundays."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Where is JP's Liquor located?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "JP's Liquor is located at 6501 Ware Rd, Lino Lakes, MN 55014, conveniently serving customers looking for a liquor store near Lino Lakes, Circle Pines, and the surrounding Twin Cities metro area."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What types of products does JP's Liquor carry?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "JP's Liquor offers a curated selection of premium spirits, fine wines, and craft beers, including many popular brands and local Minnesota favorites."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do I need to be 21 to shop at JP's Liquor?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. You must be at least 21 years of age to purchase alcohol at JP's Liquor, and a valid ID is required."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is JP's Liquor veteran-owned?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. JP's Liquor is a veteran-owned business that has been proudly serving the Lino Lakes community for over 10 years."
+          }
+        }
+      ]
+    }
+    </script>
 </head>
 <body>
+    <!-- Age Verification Overlay -->
+    <div id="age-gate-overlay" aria-modal="true" role="dialog" aria-labelledby="age-gate-title">
+      <div class="age-gate-modal">
+        <div class="age-gate-icon">
+          <i class="fas fa-wine-bottle" aria-hidden="true"></i>
+        </div>
+        <h1 id="age-gate-title">Age Verification</h1>
+        <p>
+          You must be <span class="age-gate-highlight">21 years of age or older</span> to enter JP's Liquor.
+        </p>
+
+        <div class="age-gate-buttons">
+          <button id="age-gate-yes" type="button">I am 21 or older</button>
+          <button id="age-gate-no" type="button">I am under 21</button>
+        </div>
+
+        <p class="age-gate-note">
+          By entering this site, you confirm you are of legal drinking age in your jurisdiction.
+          JP's Liquor promotes responsible drinking. Please drink responsibly. Learn more at
+          <a href="https://www.responsibility.org/" target="_blank" rel="noopener">responsibility.org</a>.
+        </p>
+      </div>
+    </div>
+
     <header class="header">
         <nav class="navbar">
             <div class="nav-container">
@@ -142,6 +421,7 @@
                     <a href="#home" class="nav-link">Home</a>
                     <a href="#about" class="nav-link">About</a>
                     <a href="#contact" class="nav-link">Contact</a>
+                    <a href="#faq" class="nav-link">FAQ</a>
                 </div>
             </div>
         </nav>
@@ -149,16 +429,19 @@
     
     <section id="home" class="hero hero-image-bg">
         <div class="hero-content">
+            <!-- background image untouched -->
             <img src="https://res.cloudinary.com/dzphhotmj/image/upload/v1755889595/Finalbeer_wntuy0.png" alt="Jp's Liquor Neon Logo" loading="eager" fetchpriority="high">
         </div>
     </section>
+
+    <!-- Section divider: Home -> About -->
+    <div class="section-divider" aria-hidden="true"></div>
     
     <section id="about" class="about-section">
         <div class="container">
             <div class="about-content">
                 <h2>About JP's Liquor - Premium Liquor Store in Lino Lakes, MN</h2>
                 <p>For over 10 years, <strong>JP's Liquor</strong> has been serving the <strong>Lino Lakes</strong> and <strong>Twin Cities</strong> community with the finest selection of spirits, wines, and craft beers. Our knowledgeable staff is here to help you find the perfect bottle for any occasion.</p>
-                <p>Located at <strong>6501 Ware Rd in Lino Lakes, Minnesota</strong>, we're your premier destination for premium alcohol, craft beer, fine wine, and spirits. As a veteran-owned business, we take pride in offering exceptional service and quality products to our valued customers.</p>
                 <div class="features">
                     <div class="feature">
                         <i class="fas fa-medal"></i>
@@ -174,6 +457,9 @@
             </div>
         </div>
     </section>
+
+    <!-- Section divider: About -> Contact -->
+    <div class="section-divider" aria-hidden="true"></div>
     
     <section id="contact" class="contact-section">
         <div class="container">
@@ -206,6 +492,71 @@
             </div>
         </div>
     </section>
+
+    <!-- Section divider: Contact -> FAQ -->
+    <div class="section-divider" aria-hidden="true"></div>
+
+    <!-- FAQ Section (for users + SEO) -->
+    <section id="faq" class="faq-section">
+      <div class="container">
+        <h2 class="faq-title">Frequently Asked Questions</h2>
+        <p class="faq-intro">
+          Have questions about JP's Liquor? Here are some quick answers about our hours, location,
+          and what we offer as your local liquor store in Lino Lakes, MN.
+        </p>
+        <div class="faq-list">
+          <div class="faq-item">
+            <div class="faq-question">
+              <i class="fas fa-question-circle" aria-hidden="true"></i>
+              <span>What are your store hours?</span>
+            </div>
+            <div class="faq-answer">
+              We&apos;re open Monday and Tuesday from 2:00 PM to 9:00 PM, and Wednesday through Saturday from 10:00 AM to 9:00 PM. JP&apos;s Liquor is closed on Sundays.
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question">
+              <i class="fas fa-question-circle" aria-hidden="true"></i>
+              <span>Where are you located?</span>
+            </div>
+            <div class="faq-answer">
+              Our store is located at 6501 Ware Rd, Lino Lakes, MN 55014. If you&apos;re looking for a liquor store near Lino Lakes or Circle Pines, we&apos;re just a short drive away with convenient parking.
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question">
+              <i class="fas fa-question-circle" aria-hidden="true"></i>
+              <span>What do you carry?</span>
+            </div>
+            <div class="faq-answer">
+              JP&apos;s Liquor offers a curated selection of premium spirits, fine wines, and craft beers, including popular national brands and local Minnesota favorites.
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question">
+              <i class="fas fa-question-circle" aria-hidden="true"></i>
+              <span>Do I need to be 21 to shop there?</span>
+            </div>
+            <div class="faq-answer">
+              Yes. You must be at least 21 years of age to purchase alcohol at JP&apos;s Liquor, and a valid ID is required for all alcohol purchases.
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question">
+              <i class="fas fa-question-circle" aria-hidden="true"></i>
+              <span>Is JP&apos;s Liquor veteran-owned?</span>
+            </div>
+            <div class="faq-answer">
+              Yes. JP&apos;s Liquor is proud to be a veteran-owned business serving the Lino Lakes and Twin Cities community for over 10 years.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
     
     <footer class="footer">
         <div class="container">
@@ -230,6 +581,50 @@
             </div>
         </div>
     </footer>
+
+    <!-- Age Gate Script -->
+    <script>
+      (function () {
+        if (typeof window === "undefined") return;
+
+        var overlay = document.getElementById("age-gate-overlay");
+        var yesBtn = document.getElementById("age-gate-yes");
+        var noBtn = document.getElementById("age-gate-no");
+        var body = document.body;
+
+        if (!overlay || !yesBtn || !noBtn) return;
+
+        function lockScroll(lock) {
+          if (!body) return;
+          if (lock) {
+            body.classList.add("no-scroll");
+          } else {
+            body.classList.remove("no-scroll");
+          }
+        }
+
+        var isVerified = window.localStorage.getItem("jps_age_verified");
+
+        if (isVerified === "true") {
+          overlay.classList.add("hidden");
+          lockScroll(false);
+        } else {
+          overlay.classList.remove("hidden");
+          lockScroll(true);
+        }
+
+        yesBtn.addEventListener("click", function () {
+          window.localStorage.setItem("jps_age_verified", "true");
+          overlay.classList.add("hidden");
+          lockScroll(false);
+        });
+
+        noBtn.addEventListener("click", function () {
+          // Send to responsibility resource, and keep scroll locked
+          window.location.href = "https://www.responsibility.org/";
+        });
+      })();
+    </script>
     
     <script src="script.js"></script>
     
@@ -239,4 +634,4 @@
     </script>
     <script defer src="/_vercel/insights/script.js"></script>
 </body>
-</html> 
+</html>

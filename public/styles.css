@@ -45,6 +45,10 @@ html {
   scroll-margin-top: var(--header-height);
 }
 
+section[id] {
+  scroll-margin-top: 80px;
+}
+
 body {
   font-family: 'Inter', Arial, sans-serif;
   background: var(--primary);
@@ -54,6 +58,7 @@ body {
   min-height: 100vh;
   font-size: var(--fs-base);
   line-height: 1.6;
+  scroll-behavior: smooth;
 }
 
 .container {
