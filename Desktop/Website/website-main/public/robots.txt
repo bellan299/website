@@ -1,0 +1,22 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://jpsliquor.com/sitemap.xml
+
+# Disallow admin or private areas (if any)
+Disallow: /admin/
+Disallow: /private/
+Disallow: /create-icons.html
+
+# Allow all other content
+Allow: /public/
+Allow: /styles.css
+Allow: /script.js
+Allow: /manifest.json
+Allow: /favicon.svg
+Allow: /favicon.ico
+Allow: /icon-*.png
+
+# Crawl delay for polite crawling
+Crawl-delay: 1
