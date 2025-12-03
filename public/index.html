@@ -50,15 +50,25 @@
     <link rel="manifest" href="/manifest.json">
     <link rel="apple-touch-icon" href="/icon-192x192.png">
     <link rel="apple-touch-icon" sizes="152x152" href="/icon-152x152.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/icon-192x192.png">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" sizes="180x180" href="/icon-180x180.png">
     <meta name="mobile-web-app-capable" content="yes">
     
     <title>JP's Liquor - Premium Spirits & Wine Store in Lino Lakes, MN | Craft Beer & Fine Wine</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="styles.css?v=2">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="prefetch" as="image" href="https://res.cloudinary.com/dzphhotmj/image/upload/v1763937822/Untitled_zvw4eq.jpg" importance="high">
+
+    <!-- Force solid backgrounds on sections to override any cached gradients -->
+    <style>
+      .about-section,
+      .contact-section {
+        background: rgba(15, 23, 42, 0.9) !important;
+        background-image: none !important;
+      }
+    </style>
 
     <!-- Age Gate + Section Divider + FAQ Styles -->
     <style>
@@ -86,6 +96,13 @@
         pointer-events: none;
       }
 
+      /* Hide age gate when session is already verified */
+      .age-verified #age-gate-overlay {
+        display: none !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+      }
+
       /* Center modal box */
       .age-gate-modal {
         max-width: 420px;
@@ -103,7 +120,8 @@
 
       .age-gate-icon {
         font-size: 2rem;
-        color: #f97316; /* warm accent */
+        color: rgb(33, 59, 152); /* accent */
+        text-shadow: 0 0 10px rgba(33, 59, 152, 0.6), 0 0 18px rgba(33, 59, 152, 0.45);
         margin-bottom: 8px;
       }
 
@@ -121,7 +139,8 @@
 
       .age-gate-highlight {
         font-weight: 600;
-        color: #fbbf24;
+        color: rgba(33, 59, 152, 0.9);
+        text-shadow: 0 0 8px rgba(33, 59, 152, 0.5);
       }
 
       .age-gate-buttons {
@@ -151,14 +170,14 @@
 
       /* Confirm button */
       #age-gate-yes {
-        background: linear-gradient(to right, #f97316, #ea580c);
-        color: #111827;
-        box-shadow: 0 8px 22px rgba(249, 115, 22, 0.35);
+        background: linear-gradient(to right, rgb(33, 59, 152), rgb(71, 103, 196));
+        color: #e5e7eb;
+        box-shadow: 0 0 16px rgba(33, 59, 152, 0.5), 0 8px 22px rgba(33, 59, 152, 0.35);
       }
 
       #age-gate-yes:hover {
         transform: translateY(-1px);
-        box-shadow: 0 10px 26px rgba(249, 115, 22, 0.45);
+        box-shadow: 0 0 18px rgba(33, 59, 152, 0.6), 0 10px 26px rgba(33, 59, 152, 0.45);
       }
 
       /* Deny button */
@@ -180,7 +199,7 @@
       }
 
       .age-gate-note a {
-        color: #fbbf24;
+        color: rgba(33, 59, 152, 0.9);
         text-decoration: underline;
         text-underline-offset: 2px;
       }
@@ -247,33 +266,68 @@
       }
 
       .faq-question {
-        font-weight: 600;
-        margin-bottom: 6px;
-        display: flex;
+        width: 100%;
+        background: transparent;
+        border: none;
+        color: #e5e7eb;
+        font-weight: 700;
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        gap: 10px;
         align-items: center;
-        gap: 8px;
+        padding: 6px 0;
+        cursor: pointer;
+        text-align: left;
       }
 
-      .faq-question i {
-        color: #f97316;
+      .faq-question:focus-visible {
+        outline: 2px solid rgb(33, 59, 152);
+        outline-offset: 4px;
+      }
+
+      .faq-question .icon-wrap i {
+        color: rgb(33, 59, 152);
         font-size: 0.9rem;
+      }
+
+      .faq-question .caret {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        border: 2px solid rgba(33, 59, 152, 0.6);
+        position: relative;
+        transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+      }
+
+      .faq-question .caret::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 6px;
+        height: 6px;
+        border-right: 2px solid rgba(33, 59, 152, 0.8);
+        border-bottom: 2px solid rgba(33, 59, 152, 0.8);
+        transform: translate(-50%, -60%) rotate(45deg);
+        transition: transform 0.2s ease, border-color 0.2s ease;
+      }
+
+      .faq-question[aria-expanded="true"] .caret {
+        background: rgba(33, 59, 152, 0.15);
+        border-color: rgba(33, 59, 152, 0.85);
+      }
+
+      .faq-question[aria-expanded="true"] .caret::after {
+        transform: translate(-50%, -40%) rotate(-135deg);
       }
 
       .faq-answer {
         font-size: 0.95rem;
         color: #e5e7eb;
         line-height: 1.5;
+        margin-top: 6px;
       }
     </style>
-    
-    <!-- Google Analytics - Replace GA_MEASUREMENT_ID with your actual tracking ID -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'GA_MEASUREMENT_ID');
-    </script>
     
     <!-- Structured Data for Local Business -->
     <script type="application/ld+json">
@@ -336,6 +390,17 @@
     }
     </script>
 
+    <!-- Avoid age-gate flash if this tab is already verified -->
+    <script>
+      (function () {
+        try {
+          if (window.sessionStorage.getItem("jps_age_verified_session") === "true") {
+            document.documentElement.classList.add("age-verified");
+          }
+        } catch (e) {}
+      })();
+    </script>
+
     <!-- Structured Data for FAQ (Local SEO) -->
     <script type="application/ld+json">
     {
@@ -388,7 +453,7 @@
 </head>
 <body>
     <!-- Age Verification Overlay -->
-    <div id="age-gate-overlay" aria-modal="true" role="dialog" aria-labelledby="age-gate-title">
+    <div id="age-gate-overlay" aria-modal="true" role="dialog" aria-labelledby="age-gate-title" aria-hidden="false">
       <div class="age-gate-modal">
         <div class="age-gate-icon">
           <i class="fas fa-wine-bottle" aria-hidden="true"></i>
@@ -410,11 +475,11 @@
         </p>
       </div>
     </div>
-
+    <div id="page-root" aria-hidden="true">
     <header class="header">
         <nav class="navbar">
             <div class="nav-container">
-                <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle navigation menu">
+                <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle navigation menu" aria-controls="nav-menu" aria-expanded="false">
                     <i class="fas fa-bars"></i>
                 </button>
                 <div class="nav-menu" id="nav-menu">
@@ -437,7 +502,7 @@
     <!-- Section divider: Home -> About -->
     <div class="section-divider" aria-hidden="true"></div>
     
-    <section id="about" class="about-section">
+    <section id="about" class="about-section" style="background: rgba(15, 23, 42, 0.9);">
         <div class="container">
             <div class="about-content">
                 <h2>About JP's Liquor - Premium Liquor Store in Lino Lakes, MN</h2>
@@ -461,12 +526,12 @@
     <!-- Section divider: About -> Contact -->
     <div class="section-divider" aria-hidden="true"></div>
     
-    <section id="contact" class="contact-section">
+    <section id="contact" class="contact-section" style="background: rgba(15, 23, 42, 0.9);">
         <div class="container">
             <div class="contact-content">
                 <div class="contact-info">
                     <h3>Store Details</h3>
-                    <p><i class="fas fa-map-marker-alt"></i> <a href="https://www.google.com/maps/place/JP's+Liquor+Wine+and+Beer+of+Lino+Lakes/@45.1427753,-93.1284756,17z/data=!3m1!4b1!4m6!3m5!1s0x52b327823dde7177:0xbb6613591d3e2d2f!8m2!3d45.1427716!4d-93.1236047!16s%2Fg%2F1w3w2pkr?entry=ttu&g_ep=EgoyMDI1MDcxNi4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener" style="color:inherit; text-decoration:underline;">6501 Ware Rd, Lino Lakes, MN 55014</a></p>
+                    <p><i class="fas fa-map-marker-alt"></i> <a href="https://www.google.com/maps/place/JP's+Liquor+Wine+and+Beer+of+Lino+Lakes/@45.1427753,-93.1284756,17z/data=!3m1!4b1!4m6!3m5!1s0x52b327823dde7177:0xbb6613591d3e2d2f!8m2!3d45.1427716!4d-93.1236047!16s%2Fg%2F1w3w2pkr?entry=ttu&g_ep=EgoyMDI1MDcxNi4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener noreferrer" style="color:inherit; text-decoration:underline;">6501 Ware Rd, Lino Lakes, MN 55014</a></p>
                     <p><i class="fas fa-phone"></i> <a href="tel:+16514831605" style="color:inherit; text-decoration:underline;">(651) 483-1605</a></p>
                     <p><i class="fas fa-envelope"></i> Jpsliquorwineandbeer@gmail.com</p>
                     <h4>Store Hours</h4>
@@ -481,10 +546,14 @@
                 <div class="contact-form">
                     <h3>Contact Us</h3>
                     <form id="contact-form" action="https://formspree.io/f/mvgqayrj" method="POST">
-                        <input type="text" name="name" placeholder="Your Name" required>
-                        <input type="email" name="email" placeholder="Your Email" required>
-                        <input type="tel" name="phone" placeholder="Your Phone">
-                        <textarea name="message" placeholder="Your Message" rows="5" required></textarea>
+                        <div class="hp-field" aria-hidden="true" style="position:absolute;left:-9999px;opacity:0;pointer-events:none;">
+                            <label for="company">Company</label>
+                            <input type="text" id="company" name="company" tabindex="-1" autocomplete="off">
+                        </div>
+                        <input type="text" name="name" placeholder="Your Name" autocomplete="name" required>
+                        <input type="email" name="email" placeholder="Your Email" autocomplete="email" required>
+                        <input type="tel" name="phone" placeholder="Your Phone" autocomplete="tel">
+                        <textarea name="message" placeholder="Your Message" rows="5" autocomplete="on" required></textarea>
                         <input type="hidden" name="_subject" value="New message from JP's Liquor website">
                         <button type="submit" class="submit-button">Send Message</button>
                     </form>
@@ -501,57 +570,40 @@
       <div class="container">
         <h2 class="faq-title">Frequently Asked Questions</h2>
         <p class="faq-intro">
-          Have questions about JP's Liquor? Here are some quick answers about our hours, location,
-          and what we offer as your local liquor store in Lino Lakes, MN.
+          Have questions about JP's Liquor? Here are quick answers about our selection, military discounts,
+          rewards, and what we offer as your local liquor store in Lino Lakes, MN.
         </p>
         <div class="faq-list">
           <div class="faq-item">
-            <div class="faq-question">
-              <i class="fas fa-question-circle" aria-hidden="true"></i>
-              <span>What are your store hours?</span>
-            </div>
-            <div class="faq-answer">
-              We&apos;re open Monday and Tuesday from 2:00 PM to 9:00 PM, and Wednesday through Saturday from 10:00 AM to 9:00 PM. JP&apos;s Liquor is closed on Sundays.
-            </div>
-          </div>
-
-          <div class="faq-item">
-            <div class="faq-question">
-              <i class="fas fa-question-circle" aria-hidden="true"></i>
-              <span>Where are you located?</span>
-            </div>
-            <div class="faq-answer">
-              Our store is located at 6501 Ware Rd, Lino Lakes, MN 55014. If you&apos;re looking for a liquor store near Lino Lakes or Circle Pines, we&apos;re just a short drive away with convenient parking.
-            </div>
-          </div>
-
-          <div class="faq-item">
-            <div class="faq-question">
-              <i class="fas fa-question-circle" aria-hidden="true"></i>
+            <button class="faq-question" aria-expanded="false">
+              <span class="icon-wrap"><i class="fas fa-question-circle" aria-hidden="true"></i></span>
               <span>What do you carry?</span>
-            </div>
-            <div class="faq-answer">
+              <span class="caret" aria-hidden="true"></span>
+            </button>
+            <div class="faq-answer" hidden>
               JP&apos;s Liquor offers a curated selection of premium spirits, fine wines, and craft beers, including popular national brands and local Minnesota favorites.
             </div>
           </div>
 
           <div class="faq-item">
-            <div class="faq-question">
-              <i class="fas fa-question-circle" aria-hidden="true"></i>
-              <span>Do I need to be 21 to shop there?</span>
-            </div>
-            <div class="faq-answer">
-              Yes. You must be at least 21 years of age to purchase alcohol at JP&apos;s Liquor, and a valid ID is required for all alcohol purchases.
+            <button class="faq-question" aria-expanded="false">
+              <span class="icon-wrap"><i class="fas fa-question-circle" aria-hidden="true"></i></span>
+              <span>Do you offer a military discount?</span>
+              <span class="caret" aria-hidden="true"></span>
+            </button>
+            <div class="faq-answer" hidden>
+              Yes. We&apos;re a veteran-owned shop and proudly offer a military discount—ask at checkout with your valid ID.
             </div>
           </div>
 
           <div class="faq-item">
-            <div class="faq-question">
-              <i class="fas fa-question-circle" aria-hidden="true"></i>
-              <span>Is JP&apos;s Liquor veteran-owned?</span>
-            </div>
-            <div class="faq-answer">
-              Yes. JP&apos;s Liquor is proud to be a veteran-owned business serving the Lino Lakes and Twin Cities community for over 10 years.
+            <button class="faq-question" aria-expanded="false">
+              <span class="icon-wrap"><i class="fas fa-question-circle" aria-hidden="true"></i></span>
+              <span>Do you have a rewards system?</span>
+              <span class="caret" aria-hidden="true"></span>
+            </button>
+            <div class="faq-answer" hidden>
+              Yes! Simply ask a cashier to sign up for rewards. Every $50 spent in store adds $1 to your rewards balance.
             </div>
           </div>
         </div>
@@ -564,13 +616,13 @@
                 <div class="footer-section" style="text-align: center;">
                     <h4 style="text-align: center;">Connect With Us</h4>
                     <div class="social-links" style="justify-content: center; display: flex; gap: 16px;">
-                        <a href="https://www.facebook.com/Jpsliquorliquorwineandbeer" target="_blank" rel="noopener">
+                        <a href="https://www.facebook.com/Jpsliquorliquorwineandbeer" target="_blank" rel="noopener noreferrer">
                             <i class="fab fa-facebook"></i>
                         </a>
-                        <a href="https://www.instagram.com/jpsliquorwineandbeer/" target="_blank" rel="noopener">
+                        <a href="https://www.instagram.com/jpsliquorwineandbeer/" target="_blank" rel="noopener noreferrer">
                             <i class="fab fa-instagram"></i>
                         </a>
-                        <a href="https://x.com/jpsliquor" target="_blank" rel="noopener">
+                        <a href="https://x.com/jpsliquor" target="_blank" rel="noopener noreferrer">
                             <i class="fab fa-twitter"></i>
                         </a>
                     </div>
@@ -581,6 +633,7 @@
             </div>
         </div>
     </footer>
+    </div>
 
     <!-- Age Gate Script -->
     <script>
@@ -591,6 +644,7 @@
         var yesBtn = document.getElementById("age-gate-yes");
         var noBtn = document.getElementById("age-gate-no");
         var body = document.body;
+        var pageRoot = document.getElementById("page-root");
 
         if (!overlay || !yesBtn || !noBtn) return;
 
@@ -603,20 +657,45 @@
           }
         }
 
-        var isVerified = window.localStorage.getItem("jps_age_verified");
+        var focusable = overlay.querySelectorAll("button, a");
+        var firstFocus = focusable[0];
+        var lastFocus = focusable[focusable.length - 1];
 
-        if (isVerified === "true") {
-          overlay.classList.add("hidden");
-          lockScroll(false);
-        } else {
-          overlay.classList.remove("hidden");
-          lockScroll(true);
+        function setGateVisibility(isVerified) {
+          if (isVerified) {
+            overlay.classList.add("hidden");
+            lockScroll(false);
+            if (pageRoot) pageRoot.setAttribute("aria-hidden", "false");
+            overlay.setAttribute("aria-hidden", "true");
+            document.documentElement.classList.add("age-verified");
+          } else {
+            overlay.classList.remove("hidden");
+            lockScroll(true);
+            if (pageRoot) pageRoot.setAttribute("aria-hidden", "true");
+            if (firstFocus) firstFocus.focus();
+            overlay.setAttribute("aria-hidden", "false");
+            document.documentElement.classList.remove("age-verified");
+          }
         }
 
+        // Check session verification (per tab)
+        var isVerified = window.sessionStorage.getItem("jps_age_verified_session") === "true";
+        setGateVisibility(isVerified);
+
+        overlay.addEventListener("keydown", function (event) {
+          if (event.key !== "Tab" || focusable.length < 2) return;
+          if (event.shiftKey && document.activeElement === firstFocus) {
+            event.preventDefault();
+            lastFocus.focus();
+          } else if (!event.shiftKey && document.activeElement === lastFocus) {
+            event.preventDefault();
+            firstFocus.focus();
+          }
+        });
+
         yesBtn.addEventListener("click", function () {
-          window.localStorage.setItem("jps_age_verified", "true");
-          overlay.classList.add("hidden");
-          lockScroll(false);
+          window.sessionStorage.setItem("jps_age_verified_session", "true");
+          setGateVisibility(true);
         });
 
         noBtn.addEventListener("click", function () {
