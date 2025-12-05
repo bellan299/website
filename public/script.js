@@ -126,6 +126,9 @@ function handleFormSubmit(event) {
 
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
+    // Force page to start at top on load/refresh (mobile + desktop)
+    window.scrollTo({ top: 0, behavior: 'auto' });
+
     // Event listeners
     if (mobileMenuToggle) {
         mobileMenuToggle.addEventListener('click', toggleMobileMenu);
@@ -156,5 +159,34 @@ document.addEventListener('DOMContentLoaded', function() {
     const contactForm = document.getElementById('contact-form');
     if (contactForm) {
         contactForm.addEventListener('submit', handleFormSubmit);
+    }
+
+    // FAQ accordion toggle for desktop + mobile
+    const faqItems = document.querySelectorAll('.faq-item');
+    faqItems.forEach(item => {
+        const questionBtn = item.querySelector('.faq-question');
+        const answer = item.querySelector('.faq-answer');
+        if (!questionBtn || !answer) return;
+
+        questionBtn.addEventListener('click', () => {
+            const isExpanded = questionBtn.getAttribute('aria-expanded') === 'true';
+            // Close all other items
+            faqItems.forEach(otherItem => {
+                const otherBtn = otherItem.querySelector('.faq-question');
+                const otherAnswer = otherItem.querySelector('.faq-answer');
+                if (otherBtn && otherAnswer) {
+                    const shouldOpen = otherItem === item && !isExpanded;
+                    otherBtn.setAttribute('aria-expanded', shouldOpen ? 'true' : 'false');
+                    otherAnswer.hidden = !shouldOpen;
+                }
+            });
+        });
+    });
+});
+
+// Handle bfcache restores to keep page at top
+window.addEventListener('pageshow', (event) => {
+    if (event.persisted) {
+        window.scrollTo({ top: 0, behavior: 'auto' });
     }
 });
