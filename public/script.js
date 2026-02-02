@@ -75,28 +75,48 @@ function handleFormSubmit(event) {
     const formData = new FormData(form);
     const submitButton = form.querySelector('.submit-button');
     const originalText = submitButton.textContent;
+    const statusMessage = form.querySelector('#form-status');
+
+    const setStatus = (message, type) => {
+        if (!statusMessage) return;
+        statusMessage.textContent = message;
+        statusMessage.classList.remove('is-error', 'is-success');
+        if (type) {
+            statusMessage.classList.add(type === 'error' ? 'is-error' : 'is-success');
+        }
+    };
     
     // Basic validation
     const requiredFields = form.querySelectorAll('[required]');
     let isValid = true;
+    let firstInvalidField = null;
     
     requiredFields.forEach(field => {
         if (!field.value.trim()) {
             field.style.borderColor = '#e74c3c';
+            field.setAttribute('aria-invalid', 'true');
             isValid = false;
+            if (!firstInvalidField) {
+                firstInvalidField = field;
+            }
         } else {
             field.style.borderColor = '#e0e0e0';
+            field.removeAttribute('aria-invalid');
         }
     });
     
     if (!isValid) {
-        alert('Please fill in all required fields.');
+        setStatus('Please fill in all required fields.', 'error');
+        if (firstInvalidField) {
+            firstInvalidField.focus();
+        }
         return;
     }
     
     // Show loading state
     submitButton.textContent = 'Sending...';
     submitButton.disabled = true;
+    setStatus('Sending your message...', null);
     
     // Submit form
     fetch(form.action, {
@@ -108,15 +128,19 @@ function handleFormSubmit(event) {
     })
     .then(response => {
         if (response.ok) {
-            alert('Thank you! Your message has been sent successfully.');
+            setStatus('Thank you! Your message has been sent successfully.', 'success');
             form.reset();
+            requiredFields.forEach(field => {
+                field.style.borderColor = '#e0e0e0';
+                field.removeAttribute('aria-invalid');
+            });
         } else {
             throw new Error('Network response was not ok');
         }
     })
     .catch(error => {
         console.error('Error:', error);
-        alert('Sorry, there was an error sending your message. Please try again or call us directly.');
+        setStatus('Sorry, there was an error sending your message. Please try again or call us directly.', 'error');
     })
     .finally(() => {
         submitButton.textContent = originalText;

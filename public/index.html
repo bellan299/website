@@ -59,336 +59,7 @@
     <link rel="stylesheet" href="styles.css?v=2">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="prefetch" as="image" href="https://res.cloudinary.com/dzphhotmj/image/upload/v1763937822/Untitled_zvw4eq.jpg" importance="high">
-
-    <!-- Force solid backgrounds on sections to override any cached gradients -->
-    <style>
-      .about-section,
-      .contact-section {
-        background: rgba(15, 23, 42, 0.9) !important;
-        background-image: none !important;
-      }
-    </style>
-
-    <!-- Age Gate + Section Divider + FAQ Styles -->
-    <style>
-      /* Prevent background scroll when age gate is active */
-      body.no-scroll {
-        overflow: hidden;
-      }
-
-      /* Age gate overlay covers entire screen */
-      #age-gate-overlay {
-        position: fixed;
-        inset: 0;
-        z-index: 9999;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: rgba(0, 0, 0, 0.92);
-        opacity: 1;
-        transition: opacity 250ms ease-out;
-      }
-
-      /* Hidden state (toggled via JS when verified) */
-      #age-gate-overlay.hidden {
-        opacity: 0;
-        pointer-events: none;
-      }
-
-      /* Hide age gate when session is already verified */
-      .age-verified #age-gate-overlay {
-        display: none !important;
-        opacity: 0 !important;
-        pointer-events: none !important;
-      }
-
-      /* Center modal box */
-      .age-gate-modal {
-        max-width: 420px;
-        width: 90%;
-        background: #030712; /* near-black */
-        border-radius: 16px;
-        padding: 26px 22px 22px;
-        text-align: center;
-        box-shadow: 0 18px 45px rgba(0, 0, 0, 0.55);
-        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-        border: 1px solid rgba(249, 115, 22, 0.35);
-        color: #f9fafb;
-        animation: ageGateFadeIn 320ms ease-out;
-      }
-
-      .age-gate-icon {
-        font-size: 2rem;
-        color: rgb(33, 59, 152); /* accent */
-        text-shadow: 0 0 10px rgba(33, 59, 152, 0.6), 0 0 18px rgba(33, 59, 152, 0.45);
-        margin-bottom: 8px;
-      }
-
-      .age-gate-modal h1 {
-        margin-bottom: 10px;
-        font-size: 1.7rem;
-        letter-spacing: 0.03em;
-      }
-
-      .age-gate-modal p {
-        margin-bottom: 14px;
-        font-size: 0.95rem;
-        color: #e5e7eb;
-      }
-
-      .age-gate-highlight {
-        font-weight: 600;
-        color: rgba(33, 59, 152, 0.9);
-        text-shadow: 0 0 8px rgba(33, 59, 152, 0.5);
-      }
-
-      .age-gate-buttons {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        margin: 10px 0 8px;
-      }
-
-      @media (min-width: 480px) {
-        .age-gate-buttons {
-          flex-direction: row;
-          justify-content: center;
-        }
-      }
-
-      .age-gate-buttons button {
-        padding: 10px 16px;
-        font-size: 0.95rem;
-        font-weight: 600;
-        border-radius: 999px;
-        border: none;
-        cursor: pointer;
-        transition: transform 150ms ease, box-shadow 150ms ease, background-color 150ms ease, color 150ms ease;
-        min-width: 150px;
-      }
-
-      /* Confirm button */
-      #age-gate-yes {
-        background: linear-gradient(to right, rgb(33, 59, 152), rgb(71, 103, 196));
-        color: #e5e7eb;
-        box-shadow: 0 0 16px rgba(33, 59, 152, 0.5), 0 8px 22px rgba(33, 59, 152, 0.35);
-      }
-
-      #age-gate-yes:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 0 18px rgba(33, 59, 152, 0.6), 0 10px 26px rgba(33, 59, 152, 0.45);
-      }
-
-      /* Deny button */
-      #age-gate-no {
-        background: transparent;
-        color: #e5e7eb;
-        border: 1px solid #4b5563;
-      }
-
-      #age-gate-no:hover {
-        background: rgba(15, 23, 42, 0.85);
-        border-color: #9ca3af;
-      }
-
-      .age-gate-note {
-        font-size: 0.75rem;
-        color: #9ca3af;
-        line-height: 1.4;
-      }
-
-      .age-gate-note a {
-        color: rgba(33, 59, 152, 0.9);
-        text-decoration: underline;
-        text-underline-offset: 2px;
-      }
-
-      @keyframes ageGateFadeIn {
-        from {
-          opacity: 0;
-          transform: translateY(12px) scale(0.96);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0) scale(1);
-        }
-      }
-
-      /* Subtle section divider */
-      .section-divider {
-        height: 1px;
-        max-width: 960px;
-        margin: 40px auto;
-        background: linear-gradient(
-          90deg,
-          rgba(15, 23, 42, 0),
-          rgba(148, 163, 184, 0.9),
-          rgba(15, 23, 42, 0)
-        );
-        opacity: 0.7;
-      }
-
-      /* Simple FAQ styling to match rest of site */
-      .faq-section {
-        padding: 40px 16px 60px;
-      }
-
-      .faq-section .container {
-        max-width: 960px;
-        margin: 0 auto;
-      }
-
-      .faq-title {
-        font-size: 1.9rem;
-        margin-bottom: 12px;
-        text-align: center;
-      }
-
-      .faq-intro {
-        text-align: center;
-        max-width: 640px;
-        margin: 0 auto 28px;
-        color: #e5e7eb;
-        font-size: 0.98rem;
-      }
-
-      .faq-list {
-        display: grid;
-        gap: 18px;
-      }
-
-      .faq-item {
-        border-radius: 10px;
-        padding: 14px 16px;
-        background: rgba(15, 23, 42, 0.9);
-        border: 1px solid rgba(55, 65, 81, 0.9);
-      }
-
-      .faq-question {
-        width: 100%;
-        background: transparent;
-        border: none;
-        color: #e5e7eb;
-        font-weight: 700;
-        display: grid;
-        grid-template-columns: auto 1fr auto;
-        gap: 10px;
-        align-items: center;
-        padding: 6px 0;
-        cursor: pointer;
-        text-align: left;
-      }
-
-      .faq-question:focus-visible {
-        outline: 2px solid rgb(33, 59, 152);
-        outline-offset: 4px;
-      }
-
-      .faq-question .icon-wrap i {
-        color: rgb(33, 59, 152);
-        font-size: 1.2rem;
-      }
-
-      .faq-question .caret {
-        width: 18px;
-        height: 18px;
-        border-radius: 50%;
-        border: 2px solid rgba(33, 59, 152, 0.6);
-        position: relative;
-        transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
-      }
-
-      .faq-question .caret::after {
-        content: "";
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        width: 6px;
-        height: 6px;
-        border-right: 2px solid rgba(33, 59, 152, 0.8);
-        border-bottom: 2px solid rgba(33, 59, 152, 0.8);
-        transform: translate(-50%, -60%) rotate(45deg);
-        transition: transform 0.2s ease, border-color 0.2s ease;
-      }
-
-      .faq-question[aria-expanded="true"] .caret {
-        background: rgba(33, 59, 152, 0.15);
-        border-color: rgba(33, 59, 152, 0.85);
-      }
-
-      .faq-question[aria-expanded="true"] .caret::after {
-        transform: translate(-50%, -40%) rotate(-135deg);
-      }
-
-      .faq-answer {
-        font-size: 0.95rem;
-        color: #e5e7eb;
-        line-height: 1.5;
-        margin-top: 6px;
-      }
-    </style>
-    
-    <!-- Structured Data for Local Business -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "LiquorStore",
-      "name": "JP's Liquor Wine and Beer",
-      "description": "Premium spirits, wines, and craft beers in Lino Lakes, Minnesota",
-      "url": "https://jpsliquor.com",
-      "telephone": "+16514831605",
-      "email": "Jpsliquorwineandbeer@gmail.com",
-      "address": {
-        "@type": "PostalAddress",
-        "streetAddress": "6501 Ware Rd",
-        "addressLocality": "Lino Lakes",
-        "addressRegion": "MN",
-        "postalCode": "55014",
-        "addressCountry": "US"
-      },
-      "geo": {
-        "@type": "GeoCoordinates",
-        "latitude": 45.1427753,
-        "longitude": -93.1284756
-      },
-      "openingHours": [
-        "Mo-Tu 14:00-21:00",
-        "We-Sa 10:00-21:00"
-      ],
-      "priceRange": "$$",
-      "paymentAccepted": ["Cash", "Credit Card", "Debit Card"],
-      "currenciesAccepted": "USD",
-      "areaServed": "Lino Lakes, Minnesota, Twin Cities Metro",
-      "hasOfferCatalog": {
-        "@type": "OfferCatalog",
-        "name": "Liquor Store Products",
-        "itemListElement": [
-          {
-            "@type": "Offer",
-            "itemOffered": {
-              "@type": "Product",
-              "name": "Premium Spirits"
-            }
-          },
-          {
-            "@type": "Offer",
-            "itemOffered": {
-              "@type": "Product",
-              "name": "Fine Wines"
-            }
-          },
-          {
-            "@type": "Offer",
-            "itemOffered": {
-              "@type": "Product",
-              "name": "Craft Beers"
-            }
-          }
-        ]
-      }
-    }
-    </script>
+    <link rel="preload" as="image" href="https://res.cloudinary.com/dzphhotmj/image/upload/v1763937822/Untitled_zvw4eq.jpg" importance="high">
 
     <!-- Avoid age-gate flash if this tab is already verified -->
     <script>
@@ -495,14 +166,24 @@
     <section id="home" class="hero hero-image-bg">
         <div class="hero-content">
             <!-- background image untouched -->
-            <img src="https://res.cloudinary.com/dzphhotmj/image/upload/v1763937822/Untitled_zvw4eq.jpg" alt="Jp's Liquor Neon Logo" loading="eager" fetchpriority="high">
+            <img src="https://res.cloudinary.com/dzphhotmj/image/upload/v1763937822/Untitled_zvw4eq.jpg" alt="Jp's Liquor Neon Logo" loading="eager" fetchpriority="high" width="1600" height="900">
+            <div class="hero-overlay">
+                <div class="hero-copy">
+                    <h1>JP&apos;s Liquor Wine &amp; Beer</h1>
+                    <p>Your neighborhood liquor store in Lino Lakes with premium spirits, wine, and craft beer.</p>
+                    <div class="hero-actions">
+                        <a class="hero-button primary" href="tel:+16514831605">Call Now</a>
+                        <a class="hero-button secondary" href="https://www.google.com/maps/place/JP's+Liquor+Wine+and+Beer+of+Lino+Lakes/@45.1427753,-93.1284756,17z/data=!3m1!4b1!4m6!3m5!1s0x52b327823dde7177:0xbb6613591d3e2d2f!8m2!3d45.1427716!4d-93.1236047!16s%2Fg%2F1w3w2pkr?entry=ttu&g_ep=EgoyMDI1MDcxNi4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener noreferrer">Get Directions</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
     <!-- Section divider: Home -> About -->
     <div class="section-divider" aria-hidden="true"></div>
     
-    <section id="about" class="about-section" style="background: rgba(15, 23, 42, 0.9);">
+    <section id="about" class="about-section">
         <div class="container">
             <div class="about-content">
                 <h2>About JP's Liquor - Premium Liquor Store in Lino Lakes, MN</h2>
@@ -526,14 +207,14 @@
     <!-- Section divider: About -> Contact -->
     <div class="section-divider" aria-hidden="true"></div>
     
-    <section id="contact" class="contact-section" style="background: rgba(15, 23, 42, 0.9);">
+    <section id="contact" class="contact-section">
         <div class="container">
             <div class="contact-content">
                 <div class="contact-info">
                     <h3>Store Details</h3>
                     <p><i class="fas fa-map-marker-alt"></i> <a href="https://www.google.com/maps/place/JP's+Liquor+Wine+and+Beer+of+Lino+Lakes/@45.1427753,-93.1284756,17z/data=!3m1!4b1!4m6!3m5!1s0x52b327823dde7177:0xbb6613591d3e2d2f!8m2!3d45.1427716!4d-93.1236047!16s%2Fg%2F1w3w2pkr?entry=ttu&g_ep=EgoyMDI1MDcxNi4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener noreferrer" style="color:inherit; text-decoration:underline;">6501 Ware Rd, Lino Lakes, MN 55014</a></p>
                     <p><i class="fas fa-phone"></i> <a href="tel:+16514831605" style="color:inherit; text-decoration:underline;">(651) 483-1605</a></p>
-                    <p><i class="fas fa-envelope"></i> Jpsliquorwineandbeer@gmail.com</p>
+                    <p><i class="fas fa-envelope"></i> <a href="mailto:Jpsliquorwineandbeer@gmail.com" style="color:inherit; text-decoration:underline;">Jpsliquorwineandbeer@gmail.com</a></p>
                     <h4>Store Hours</h4>
                     <p>Monday: 1:00 PM - 8:00 PM</p>
                     <p>Tuesday: 1:00 PM - 8:00 PM</p>
@@ -550,12 +231,17 @@
                             <label for="company">Company</label>
                             <input type="text" id="company" name="company" tabindex="-1" autocomplete="off">
                         </div>
-                        <input type="text" name="name" placeholder="Your Name" autocomplete="name" required>
-                        <input type="email" name="email" placeholder="Your Email" autocomplete="email" required>
-                        <input type="tel" name="phone" placeholder="Your Phone" autocomplete="tel">
-                        <textarea name="message" placeholder="Your Message" rows="5" autocomplete="on" required></textarea>
+                        <label class="sr-only" for="contact-name">Your Name</label>
+                        <input type="text" id="contact-name" name="name" placeholder="Your Name" autocomplete="name" required>
+                        <label class="sr-only" for="contact-email">Your Email</label>
+                        <input type="email" id="contact-email" name="email" placeholder="Your Email" autocomplete="email" required>
+                        <label class="sr-only" for="contact-phone">Your Phone</label>
+                        <input type="tel" id="contact-phone" name="phone" placeholder="Your Phone" autocomplete="tel">
+                        <label class="sr-only" for="contact-message">Your Message</label>
+                        <textarea id="contact-message" name="message" placeholder="Your Message" rows="5" autocomplete="on" required></textarea>
                         <input type="hidden" name="_subject" value="New message from JP's Liquor website">
                         <button type="submit" class="submit-button">Send Message</button>
+                        <p id="form-status" class="form-status" role="status" aria-live="polite"></p>
                     </form>
                 </div>
             </div>
@@ -613,16 +299,16 @@
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
-                <div class="footer-section" style="text-align: center;">
-                    <h4 style="text-align: center;">Connect With Us</h4>
-                    <div class="social-links" style="justify-content: center; display: flex; gap: 16px;">
-                        <a href="https://www.facebook.com/Jpsliquorliquorwineandbeer" target="_blank" rel="noopener noreferrer">
+                <div class="footer-section">
+                    <h4>Connect With Us</h4>
+                    <div class="social-links">
+                        <a href="https://www.facebook.com/Jpsliquorliquorwineandbeer" target="_blank" rel="noopener noreferrer" aria-label="Visit JP's Liquor on Facebook">
                             <i class="fab fa-facebook"></i>
                         </a>
-                        <a href="https://www.instagram.com/jpsliquorwineandbeer/" target="_blank" rel="noopener noreferrer">
+                        <a href="https://www.instagram.com/jpsliquorwineandbeer/" target="_blank" rel="noopener noreferrer" aria-label="Visit JP's Liquor on Instagram">
                             <i class="fab fa-instagram"></i>
                         </a>
-                        <a href="https://x.com/jpsliquor" target="_blank" rel="noopener noreferrer">
+                        <a href="https://x.com/jpsliquor" target="_blank" rel="noopener noreferrer" aria-label="Visit JP's Liquor on X (formerly Twitter)">
                             <i class="fab fa-twitter"></i>
                         </a>
                     </div>
